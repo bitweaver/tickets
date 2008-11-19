@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/list_tickets.php,v 1.1 2008/11/19 23:32:20 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/list_tickets.php,v 1.2 2008/11/19 23:42:07 pppspoonman Exp $
 // Copyright (c) 2004 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -61,6 +61,6 @@ $gBitSmarty->assign_by_ref( 'ticketssList', $ticketssList );
 $gBitSmarty->assign_by_ref( 'listInfo', $_REQUEST['listInfo'] );
 
 // Display the template
-$gBitSystem->display( 'bitpackage:tickets/list_ticketss.tpl', tra( 'Tickets' ) , array( 'display_mode' => 'list' ));
+$gBitSystem->display( 'bitpackage:tickets/list_tickets.tpl', tra( 'Tickets' ) , array( 'display_mode' => 'list' ));
 
 ?>
