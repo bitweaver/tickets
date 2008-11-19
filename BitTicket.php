@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/Attic/BitTickets.php,v 1.1 2008/11/19 23:15:13 pppspoonman Exp $
-* $Id: BitTickets.php,v 1.1 2008/11/19 23:15:13 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.1 2008/11/19 23:59:37 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.1 2008/11/19 23:59:37 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.1 $ $Date: 2008/11/19 23:15:13 $ $Author: pppspoonman $
+* @version $Revision: 1.1 $ $Date: 2008/11/19 23:59:37 $ $Author: pppspoonman $
 * @class BitTickets
 */
 
