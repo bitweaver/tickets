@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.3 2008/11/20 00:14:08 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.3 2008/11/20 00:14:08 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.4 2008/11/20 21:10:19 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.4 2008/11/20 21:10:19 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.3 $ $Date: 2008/11/20 00:14:08 $ $Author: pppspoonman $
+* @version $Revision: 1.4 $ $Date: 2008/11/20 21:10:19 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -31,17 +31,33 @@ class BitTicket extends LibertyMime {
 	var $mTicketId;
 
 	/**
+	 * Assignee user's id.
+     * @var int
+	 * @access public
+	 */
+	var $mAssigneeId;
+
+    /**
+     * Attributes.
+     * @var array
+     * @access public
+     */
+    var $mAttributes;
+
+	/**
 	 * BitTicket During initialisation, be sure to call our base constructors
 	 * 
-	 * @param numeric $pTicketsId 
+	 * @param numeric $pTicketId 
 	 * @param numeric $pContentId 
 	 * @access public
 	 * @return void
 	 */
-	function BitTicket( $pTicketsId=NULL, $pContentId=NULL ) {
+	function BitTicket( $pTicketId=NULL, $pContentId=NULL ) {
 		LibertyMime::LibertyMime();
-		$this->mTicketId = $pTicketsId;
+		$this->mTicketId = $pTicketId;
 		$this->mContentId = $pContentId;
+		$this->mAssigneeId = NULL;
+		$this->mAttributes = array();
 		$this->mContentTypeGuid = BITTICKET_CONTENT_TYPE_GUID;
 		$this->registerContentType( BITTICKET_CONTENT_TYPE_GUID, array(
 			'content_type_guid'   => BITTICKET_CONTENT_TYPE_GUID,
@@ -75,15 +91,21 @@ class BitTicket extends LibertyMime {
 			$this->getServicesSql( 'content_load_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
 
 			$query = "
-				SELECT smpl.*, lc.*,
+				SELECT s.*, lc.*,
 				uue.`login` AS modifier_user, uue.`real_name` AS modifier_real_name,
 				uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name
 				$selectSql
-				FROM `".BIT_DB_PREFIX."ticketss` smpl
-					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = smpl.`content_id` ) $joinSql
+				FROM `".BIT_DB_PREFIX."tickets` s
+					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = s.`content_id` ) $joinSql
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = lc.`modifier_user_id` )
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
-				WHERE smpl.`$lookupColumn`=? $whereSql";
+				WHERE s.`$lookupColumn`=? $whereSql";
+
+            $attrQuery = "SELECT ta.*, tf.`field_guid`, tf.`field_value`
+                FROM `".BIT_DB_PREFIX."ticket_attributes` ta
+                    LEFT JOIN `".BIT_DB_PREFIX."ticket_fields tf ON( ta.`field_id` = tf.`field_id` )
+                WHERE ta.`ticket_id`=?";
+
 			$result = $this->mDb->query( $query, $bindVars );
 
 			if( $result && $result->numRows() ) {
@@ -96,6 +118,12 @@ class BitTicket extends LibertyMime {
 				$this->mInfo['display_name'] = BitUser::getTitle( $this->mInfo );
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				$this->mInfo['parsed_data'] = $this->parseData();
+
+                $attrResult = $this->mDb->query( $attrQuery, array ( $this->mTicketId ) );
+                
+                while ( $row = $attrResult->fetchRow() ) {
+                    $this->mAttributes[] = $row;
+                }
 
 				LibertyMime::load();
 			}
@@ -114,23 +142,44 @@ class BitTicket extends LibertyMime {
 	 * @return boolean TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
 	function store( &$pParamHash ) {
-		$this->mDb->StartTrans();
+//		$this->mDb->StartTrans();
 		if( $this->verify( $pParamHash )&& LibertyMime::store( $pParamHash ) ) {
 			$table = BIT_DB_PREFIX."ticketss";
+            $attrTable = BIT_DB_PREFIX."ticket_attributes";
+
+			$this->mDb->StartTrans();
 			if( $this->mTicketId ) {
 				$locId = array( "ticket_id" => $pParamHash['ticket_id'] );
-				$result = $this->mDb->associateUpdate( $table, $pParamHash['tickets_store'], $locId );
+				$result = $this->mDb->associateUpdate( $table, $pParamHash['ticket_store'], $locId );
+
+                foreach( $pParamHash['ticket_store']['attributes'] as $attr) {
+                    // if attributes has changed update row and store one in history
+                    if ( !( array_has_key( $this->mAttributes, $attr['field_guid'] ) ) ) {
+                        $locId ['field_id'] = $attr['field_id'];
+                        $result = $this->mDB->associateInsert( $attrTable, array( 'ticket_id' => $this->mTicketId, $attr ) );
+                    }
+                    else if ( $this->mAttributes[$attr['field_guid']]['field_value'] != $attr['field_value'] ) {
+                        $locId ['field_id'] = $attr['field_id'];
+                        $result = $this->mDB->associateUpdate( $attrTable, array( 'ticket_id' => $this->mTicketId, $attr ) );
+                    }
+                }
+
+
 			} else {
-				$pParamHash['tickets_store']['content_id'] = $pParamHash['content_id'];
+				$pParamHash['ticket_store']['content_id'] = $pParamHash['content_id'];
 				if( @$this->verifyId( $pParamHash['ticket_id'] ) ) {
 					// if pParamHash['ticket_id'] is set, some is requesting a particular ticket_id. Use with caution!
-					$pParamHash['tickets_store']['ticket_id'] = $pParamHash['ticket_id'];
+					$pParamHash['ticket_store']['ticket_id'] = $pParamHash['ticket_id'];
 				} else {
-					$pParamHash['tickets_store']['ticket_id'] = $this->mDb->GenID( 'tickets_ticket_id_seq' );
+					$pParamHash['ticket_store']['ticket_id'] = $this->mDb->GenID( 'tickets_ticket_id_seq' );
 				}
-				$this->mTicketId = $pParamHash['tickets_store']['ticket_id'];
+				$this->mTicketId = $pParamHash['ticket_store']['ticket_id'];
 
-				$result = $this->mDb->associateInsert( $table, $pParamHash['tickets_store'] );
+				$result = $this->mDb->associateInsert( $table, $pParamHash['ticket_store'] );
+				
+                foreach( $pParamHash['attributes'] as $attr) {
+                    $result = $this->mDb->associateInsert( $attrTable, array( 'ticket_id' => $this->mTicketId, 'field_id' => $attr ) );
+                }
 			}
 
 
@@ -168,17 +217,17 @@ class BitTicket extends LibertyMime {
 		}
 
 		if( @$this->verifyId( $pParamHash['content_id'] ) ) {
-			$pParamHash['tickets_store']['content_id'] = $pParamHash['content_id'];
+			$pParamHash['ticket_store']['content_id'] = $pParamHash['content_id'];
 		}
 
 		// check some lengths, if too long, then truncate
 		if( $this->isValid() && !empty( $this->mInfo['description'] ) && empty( $pParamHash['description'] ) ) {
 			// someone has deleted the description, we need to null it out
-			$pParamHash['tickets_store']['description'] = '';
+			$pParamHash['ticket_store']['description'] = '';
 		} else if( empty( $pParamHash['description'] ) ) {
 			unset( $pParamHash['description'] );
 		} else {
-			$pParamHash['tickets_store']['description'] = substr( $pParamHash['description'], 0, 200 );
+			$pParamHash['ticket_store']['description'] = substr( $pParamHash['description'], 0, 200 );
 		}
 
 		if( !empty( $pParamHash['data'] ) ) {
@@ -214,7 +263,7 @@ class BitTicket extends LibertyMime {
 		$ret = FALSE;
 		if( $this->isValid() ) {
 			$this->mDb->StartTrans();
-			$query = "DELETE FROM `".BIT_DB_PREFIX."ticketss` WHERE `content_id` = ?";
+			$query = "DELETE FROM `".BIT_DB_PREFIX."tickets` WHERE `content_id` = ?";
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
 			if( LibertyMime::expunge() ) {
 				$ret = TRUE;
@@ -267,22 +316,37 @@ class BitTicket extends LibertyMime {
 		}
 
 		$query = "
-			SELECT smpl.*, lc.`content_id`, lc.`title`, lc.`data` $selectSql
-			FROM `".BIT_DB_PREFIX."ticketss` smpl
-				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = smpl.`content_id` ) $joinSql
+			SELECT ts.*, lc.`title`, lc.`data` $selectSql
+			FROM `".BIT_DB_PREFIX."tickets` ts
+				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql
 			ORDER BY ".$this->mDb->convertSortmode( $sort_mode );
 		$query_cant = "
 			SELECT COUNT(*)
-			FROM `".BIT_DB_PREFIX."ticketss` smpl
-				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = smpl.`content_id` ) $joinSql
+			FROM `".BIT_DB_PREFIX."tickets` ts
+				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql";
 		$result = $this->mDb->query( $query, $bindVars, $max_records, $offset );
+
+        $query_attr = "SELECT ta.*, tf.`field_guid`, tf.`field_value`
+                FROM `".BIT_DB_PREFIX."ticket_attributes` ta
+                    LEFT JOIN `".BIT_DB_PREFIX."ticket_fields tf ON( ta.`field_id` = tf.`field_id` )
+                WHERE ta.`ticket_id` IN ? $whereSql
+				ORDER BY tf.`field_guid`";
 		$ret = array();
+		$ids = array();
 		while( $res = $result->fetchRow() ) {
-			$ret[] = $res;
+            $ids[] = $res['ticket_id'];
+			$ret[$res['ticket_id']] = $res;
 		}
 		$pParamHash["cant"] = $this->mDb->getOne( $query_cant, $bindVars );
+		
+		if ( $pParamHash["cant"] > 0 ) {
+			$result = $this->mDb->query( $query_attr, array( $ids ) );
+			
+			while( $res = $result->fetchRow() ) 
+				$ret[$res['ticket_id']]['attributes'][$res['field_guid']] = $res;
+		}
 
 		// add all pagination info to pParamHash
 		LibertyContent::postGetList( $pParamHash );
@@ -306,6 +370,32 @@ class BitTicket extends LibertyMime {
 			}
 		}
 		return $ret;
+	}
+
+	static function getFieldValues () {
+		global $gBitDb;
+		
+		$query = "SELECT * FROM `".BIT_DB_PREFIX."ticket_field_values` ORDER BY `sort_order`";
+		
+		$result = $gBitDb->query ($query);
+		$ret = array ();
+		
+		while( $res = $result->fetchRow() ) {
+			$ret[$res['field_id']][] = $res;
+		}
+		
+		return $ret;
+	}
+
+	static function getFieldDefinitions () {
+		global $gBitDb;
+		
+        // use group by rather then distinct
+		$query = "SELECT * FROM `".BIT_DB_PREFIX."ticket_field_defs` WHERE `is_enabled`=1 ORDER BY `sort_order`";
+		
+		$result = $gBitDb->query ($query);
+
+        return $result;
 	}
 }
 ?>
