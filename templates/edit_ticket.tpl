@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/Attic/edit_tickets.tpl,v 1.2 2008/11/20 00:14:08 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.1 2008/11/20 00:17:34 pppspoonman Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
