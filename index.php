@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/index.php,v 1.2 2008/11/19 23:15:13 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/index.php,v 1.3 2008/11/20 00:14:08 pppspoonman Exp $
 // Copyright (c) 2004 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -11,8 +11,8 @@ require_once( '../bit_setup_inc.php' );
 $gBitSystem->verifyPackage( 'tickets' );
 
 // Get the default content if none is requested 
-if( !isset( $_REQUEST['tickets_id'] ) ) {
-	$_REQUEST['tickets_id'] = $gBitSystem->getConfig( "home_tickets" );
+if( !isset( $_REQUEST['ticket_id'] ) ) {
+	$_REQUEST['ticket_id'] = $gBitSystem->getConfig( "home_tickets" );
 }
 
 // Look up the content

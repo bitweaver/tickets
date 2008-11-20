@@ -1,16 +1,16 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.2 2008/11/20 00:05:32 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.2 2008/11/20 00:05:32 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.3 2008/11/20 00:14:08 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.3 2008/11/20 00:14:08 pppspoonman Exp $
 */
 
 /**
 * Tickets class to illustrate best practices when creating a new bitweaver package that
 * builds on core bitweaver functionality, such as the Liberty CMS engine
 *
-* date created 2004/8/15
-* @author spider <spider@steelsun.com>
-* @version $Revision: 1.2 $ $Date: 2008/11/20 00:05:32 $ $Author: pppspoonman $
+* date created 2008/10/19
+* @author SpOOnman <tomasz2k@poczta.onet.pl>
+* @version $Revision: 1.3 $ $Date: 2008/11/20 00:14:08 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -19,16 +19,16 @@ require_once( LIBERTY_PKG_PATH.'LibertyMime.php' );
 /**
 * This is used to uniquely identify the object
 */
-define( 'BITTICKETS_CONTENT_TYPE_GUID', 'bittickets' );
+define( 'BITTICKET_CONTENT_TYPE_GUID', 'bitticket' );
 
 class BitTicket extends LibertyMime {
 	/**
-	 * mTicketsId Primary key for our mythical Tickets class object & table
+	 * mTicketId Primary key for our mythical Ticket class object & table
 	 * 
 	 * @var array
 	 * @access public
 	 */
-	var $mTicketsId;
+	var $mTicketId;
 
 	/**
 	 * BitTicket During initialisation, be sure to call our base constructors
@@ -40,12 +40,12 @@ class BitTicket extends LibertyMime {
 	 */
 	function BitTicket( $pTicketsId=NULL, $pContentId=NULL ) {
 		LibertyMime::LibertyMime();
-		$this->mTicketsId = $pTicketsId;
+		$this->mTicketId = $pTicketsId;
 		$this->mContentId = $pContentId;
-		$this->mContentTypeGuid = BITTICKETS_CONTENT_TYPE_GUID;
-		$this->registerContentType( BITTICKETS_CONTENT_TYPE_GUID, array(
-			'content_type_guid'   => BITTICKETS_CONTENT_TYPE_GUID,
-			'content_description' => 'Tickets package with bare essentials',
+		$this->mContentTypeGuid = BITTICKET_CONTENT_TYPE_GUID;
+		$this->registerContentType( BITTICKET_CONTENT_TYPE_GUID, array(
+			'content_type_guid'   => BITTICKET_CONTENT_TYPE_GUID,
+			'content_description' => 'Tickets package provide a simple system of tracking tasks, requests or bugs.',
 			'handler_class'       => 'BitTicket',
 			'handler_package'     => 'tickets',
 			'handler_file'        => 'BitTicket.php',
@@ -65,13 +65,13 @@ class BitTicket extends LibertyMime {
 	 * @return boolean TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
 	function load() {
-		if( $this->verifyId( $this->mTicketsId ) || $this->verifyId( $this->mContentId ) ) {
+		if( $this->verifyId( $this->mTicketId ) || $this->verifyId( $this->mContentId ) ) {
 			// LibertyContent::load()assumes you have joined already, and will not execute any sql!
 			// This is a significant performance optimization
-			$lookupColumn = $this->verifyId( $this->mTicketsId ) ? 'tickets_id' : 'content_id';
+			$lookupColumn = $this->verifyId( $this->mTicketId ) ? 'ticket_id' : 'content_id';
 			$bindVars = array();
 			$selectSql = $joinSql = $whereSql = '';
-			array_push( $bindVars, $lookupId = @BitBase::verifyId( $this->mTicketsId ) ? $this->mTicketsId : $this->mContentId );
+			array_push( $bindVars, $lookupId = @BitBase::verifyId( $this->mTicketId ) ? $this->mTicketId : $this->mContentId );
 			$this->getServicesSql( 'content_load_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
 
 			$query = "
@@ -89,7 +89,7 @@ class BitTicket extends LibertyMime {
 			if( $result && $result->numRows() ) {
 				$this->mInfo = $result->fields;
 				$this->mContentId = $result->fields['content_id'];
-				$this->mTicketsId = $result->fields['tickets_id'];
+				$this->mTicketId = $result->fields['ticket_id'];
 
 				$this->mInfo['creator'] = ( !empty( $result->fields['creator_real_name'] ) ? $result->fields['creator_real_name'] : $result->fields['creator_user'] );
 				$this->mInfo['editor'] = ( !empty( $result->fields['modifier_real_name'] ) ? $result->fields['modifier_real_name'] : $result->fields['modifier_user'] );
@@ -117,18 +117,18 @@ class BitTicket extends LibertyMime {
 		$this->mDb->StartTrans();
 		if( $this->verify( $pParamHash )&& LibertyMime::store( $pParamHash ) ) {
 			$table = BIT_DB_PREFIX."ticketss";
-			if( $this->mTicketsId ) {
-				$locId = array( "tickets_id" => $pParamHash['tickets_id'] );
+			if( $this->mTicketId ) {
+				$locId = array( "ticket_id" => $pParamHash['ticket_id'] );
 				$result = $this->mDb->associateUpdate( $table, $pParamHash['tickets_store'], $locId );
 			} else {
 				$pParamHash['tickets_store']['content_id'] = $pParamHash['content_id'];
-				if( @$this->verifyId( $pParamHash['tickets_id'] ) ) {
-					// if pParamHash['tickets_id'] is set, some is requesting a particular tickets_id. Use with caution!
-					$pParamHash['tickets_store']['tickets_id'] = $pParamHash['tickets_id'];
+				if( @$this->verifyId( $pParamHash['ticket_id'] ) ) {
+					// if pParamHash['ticket_id'] is set, some is requesting a particular ticket_id. Use with caution!
+					$pParamHash['tickets_store']['ticket_id'] = $pParamHash['ticket_id'];
 				} else {
-					$pParamHash['tickets_store']['tickets_id'] = $this->mDb->GenID( 'tickets_tickets_id_seq' );
+					$pParamHash['tickets_store']['ticket_id'] = $this->mDb->GenID( 'tickets_ticket_id_seq' );
 				}
-				$this->mTicketsId = $pParamHash['tickets_store']['tickets_id'];
+				$this->mTicketId = $pParamHash['tickets_store']['ticket_id'];
 
 				$result = $this->mDb->associateInsert( $table, $pParamHash['tickets_store'] );
 			}
@@ -153,8 +153,8 @@ class BitTicket extends LibertyMime {
 	function verify( &$pParamHash ) {
 		global $gBitUser, $gBitSystem;
 
-		// make sure we're all loaded up of we have a mTicketsId
-		if( $this->verifyId( $this->mTicketsId ) && empty( $this->mInfo ) ) {
+		// make sure we're all loaded up of we have a mTicketId
+		if( $this->verifyId( $this->mTicketId ) && empty( $this->mInfo ) ) {
 			$this->load();
 		}
 
@@ -187,7 +187,7 @@ class BitTicket extends LibertyMime {
 
 		// check for name issues, first truncate length if too long
 		if( !empty( $pParamHash['title'] ) ) {
-			if( empty( $this->mTicketsId ) ) {
+			if( empty( $this->mTicketId ) ) {
 				if( empty( $pParamHash['title'] ) ) {
 					$this->mErrors['title'] = 'You must enter a name for this page.';
 				} else {
@@ -233,7 +233,7 @@ class BitTicket extends LibertyMime {
 	 * @return boolean TRUE on success, FALSE on failure
 	 */
 	function isValid() {
-		return( @BitBase::verifyId( $this->mTicketsId ) && @BitBase::verifyId( $this->mContentId ));
+		return( @BitBase::verifyId( $this->mTicketId ) && @BitBase::verifyId( $this->mContentId ));
 	}
 
 	/**
@@ -300,9 +300,9 @@ class BitTicket extends LibertyMime {
 		$ret = NULL;
 		if( @$this->isValid() ) {
 			if( $gBitSystem->isFeatureActive( 'pretty_urls' ) || $gBitSystem->isFeatureActive( 'pretty_urls_extended' )) {
-				$ret = TICKETS_PKG_URL.$this->mTicketsId;
+				$ret = TICKETS_PKG_URL.$this->mTicketId;
 			} else {
-				$ret = TICKETS_PKG_URL."index.php?tickets_id=".$this->mTicketsId;
+				$ret = TICKETS_PKG_URL."index.php?ticket_id=".$this->mTicketId;
 			}
 		}
 		return $ret;

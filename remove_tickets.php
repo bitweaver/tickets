@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_tickets/remove_tickets.php,v 1.2 2008/11/20 00:05:32 pppspoonman Exp $
+ * $Header: /cvsroot/bitweaver/_bit_tickets/remove_tickets.php,v 1.3 2008/11/20 00:14:08 pppspoonman Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: remove_tickets.php,v 1.2 2008/11/20 00:05:32 pppspoonman Exp $
+ * $Id: remove_tickets.php,v 1.3 2008/11/20 00:14:08 pppspoonman Exp $
  * @package tickets
  * @subpackage functions
  */
@@ -39,7 +39,7 @@ if( isset( $_REQUEST["confirm"] ) ) {
 
 $gBitSystem->setBrowserTitle( tra( 'Confirm delete of: ' ).$gContent->getTitle() );
 $formHash['remove'] = TRUE;
-$formHash['tickets_id'] = $_REQUEST['tickets_id'];
+$formHash['ticket_id'] = $_REQUEST['ticket_id'];
 $msgHash = array(
 	'label' => tra( 'Delete Tickets' ),
 	'confirm_item' => $gContent->getTitle(),

@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/admin/admin_tickets_inc.php,v 1.2 2008/11/20 00:05:32 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/admin/admin_tickets_inc.php,v 1.3 2008/11/20 00:14:08 pppspoonman Exp $
 // Copyright (c) 2005 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -13,7 +13,7 @@
 require_once( TICKETS_PKG_PATH.'BitTicket.php' );
 
 $formTicketsLists = array(
-	"tickets_list_tickets_id" => array(
+	"tickets_list_ticket_id" => array(
 		'label' => 'Id',
 		'note' => 'Display the tickets id.',
 	),

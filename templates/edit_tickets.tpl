@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/Attic/edit_tickets.tpl,v 1.1 2008/11/19 23:15:15 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/Attic/edit_tickets.tpl,v 1.2 2008/11/20 00:14:08 pppspoonman Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -6,13 +6,13 @@
 	{if $smarty.request.preview}
 		<h2>Preview {$gContent->mInfo.title|escape}</h2>
 		<div class="preview">
-			{include file="bitpackage:tickets/tickets_display.tpl" page=`$gContent->mInfo.tickets_id`}
+			{include file="bitpackage:tickets/tickets_display.tpl" page=`$gContent->mInfo.ticket_id`}
 		</div>
 	{/if}
 
 	<div class="header">
 		<h1>
-			{if $gContent->mInfo.tickets_id}
+			{if $gContent->mInfo.ticket_id}
 				{tr}Edit {$gContent->mInfo.title|escape}{/tr}
 			{else}
 				{tr}Create New Record{/tr}
@@ -25,7 +25,7 @@
 			{jstabs}
 				{jstab}
 					{legend legend="Edit/Create Tickets Record"}
-						<input type="hidden" name="tickets[tickets_id]" value="{$gContent->mInfo.tickets_id}" />
+						<input type="hidden" name="tickets[ticket_id]" value="{$gContent->mInfo.ticket_id}" />
 
 						<div class="row">
 							{formlabel label="Title" for="title"}

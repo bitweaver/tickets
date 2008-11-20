@@ -45,7 +45,7 @@ class TestBitTicket extends Test {
     
     function testNullItem()
     {
-	$this->id = $this->test->mTicketsId;
+	$this->id = $this->test->mTicketId;
         $this->test = NULL;
         Assert::equals($this->test, NULL);
     }

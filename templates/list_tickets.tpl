@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets.tpl,v 1.1 2008/11/19 23:33:37 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets.tpl,v 1.2 2008/11/20 00:14:08 pppspoonman Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -16,8 +16,8 @@
 
 			<table class="data">
 				<tr>
-					{if $gBitSystem->isFeatureActive( 'tickets_list_tickets_id' ) eq 'y'}
-						<th>{smartlink ititle="Tickets Id" isort=tickets_id offset=$control.offset iorder=desc idefault=1}</th>
+					{if $gBitSystem->isFeatureActive( 'tickets_list_ticket_id' ) eq 'y'}
+						<th>{smartlink ititle="Tickets Id" isort=ticket_id offset=$control.offset iorder=desc idefault=1}</th>
 					{/if}
 
 					{if $gBitSystem->isFeatureActive( 'tickets_list_title' ) eq 'y'}
@@ -39,8 +39,8 @@
 
 				{foreach item=tickets from=$ticketssList}
 					<tr class="{cycle values="even,odd"}">
-						{if $gBitSystem->isFeatureActive( 'tickets_list_tickets_id' )}
-							<td><a href="{$smarty.const.TICKETS_PKG_URL}index.php?tickets_id={$tickets.tickets_id|escape:"url"}" title="{$tickets.tickets_id}">{$tickets.tickets_id}</a></td>
+						{if $gBitSystem->isFeatureActive( 'tickets_list_ticket_id' )}
+							<td><a href="{$smarty.const.TICKETS_PKG_URL}index.php?ticket_id={$tickets.ticket_id|escape:"url"}" title="{$tickets.ticket_id}">{$tickets.ticket_id}</a></td>
 						{/if}
 
 						{if $gBitSystem->isFeatureActive( 'tickets_list_title' )}
@@ -57,8 +57,8 @@
 
 						{if $gBitUser->hasPermission( 'p_tickets_update' )}
 							<td class="actionicon">
-								{smartlink ititle="Edit" ifile="edit.php" ibiticon="icons/accessories-text-editor" tickets_id=$tickets.tickets_id}
-								<input type="checkbox" name="checked[]" title="{$tickets.title|escape}" value="{$tickets.tickets_id}" />
+								{smartlink ititle="Edit" ifile="edit.php" ibiticon="icons/accessories-text-editor" ticket_id=$tickets.ticket_id}
+								<input type="checkbox" name="checked[]" title="{$tickets.title|escape}" value="{$tickets.ticket_id}" />
 							</td>
 						{/if}
 					</tr>

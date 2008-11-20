@@ -1,7 +1,7 @@
 <?php
 $tables = array(
 	'ticketss' => "
-		tickets_id I4 PRIMARY,
+		ticket_id I4 PRIMARY,
 		content_id I4 NOTNULL,
 		description C(160)
 	",
@@ -20,13 +20,13 @@ $gBitInstaller->registerPackageInfo( TICKETS_PKG_NAME, array(
 
 // ### Indexes
 $indices = array(
-	'bit_ticketss_tickets_id_idx' => array('table' => 'ticketss', 'cols' => 'tickets_id', 'opts' => NULL ),
+	'bit_ticketss_ticket_id_idx' => array('table' => 'ticketss', 'cols' => 'ticket_id', 'opts' => NULL ),
 );
 $gBitInstaller->registerSchemaIndexes( TICKETS_PKG_NAME, $indices );
 
 // ### Sequences
 $sequences = array (
-	'tickets_tickets_id_seq'      => array( 'start' => 1 )
+	'tickets_ticket_id_seq'      => array( 'start' => 1 )
 );
 $gBitInstaller->registerSchemaSequences( TICKETS_PKG_NAME, $sequences );
 
@@ -44,8 +44,8 @@ $gBitInstaller->registerUserPermissions( TICKETS_PKG_NAME, array(
 
 // ### Default Preferences
 $gBitInstaller->registerPreferences( TICKETS_PKG_NAME, array(
-	array( TICKETS_PKG_NAME, 'tickets_default_ordering', 'tickets_id_desc' ),
-	array( TICKETS_PKG_NAME, 'tickets_list_tickets_id', 'y' ),
+	array( TICKETS_PKG_NAME, 'tickets_default_ordering', 'ticket_id_desc' ),
+	array( TICKETS_PKG_NAME, 'tickets_list_ticket_id', 'y' ),
 	array( TICKETS_PKG_NAME, 'tickets_list_title', 'y' ),
 	array( TICKETS_PKG_NAME, 'tickets_list_description', 'y' ),
 	array( TICKETS_PKG_NAME, 'tickets_list_tickets', 'y' ),
