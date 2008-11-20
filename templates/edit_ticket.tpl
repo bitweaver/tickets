@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.2 2008/11/20 00:22:16 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.3 2008/11/20 21:11:52 pppspoonman Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -25,24 +25,34 @@
 			{jstabs}
 				{jstab}
 					{legend legend="Edit/Create Tickets Record"}
-						<input type="hidden" name="tickets[ticket_id]" value="{$gContent->mInfo.ticket_id}" />
+						<input type="hidden" name="ticket[ticket_id]" value="{$gContent->mInfo.ticket_id}" />
+
+						{foreach from=$fieldDefinitions item=fieldDef}
+                            {if (($gContent->mInfo.ticket_id) || ($fieldDef.use_at_creation == 1)) }
+                                <div class="row {cycle values='odd,even'}">
+                                {formlabel label=$fieldDef.title|capitalize for=$fieldDef.field_id}
+                                {forminput}
+                                    <select name="ticket[attributes][{$fieldDef.field_id}]" id="{$fieldDef.field_id}">
+                                    {foreach from=$fieldValues[$fieldDef.field_id] item=fieldRow}
+                                        <option value="{$fieldRow.id}"
+                                        {if ($gContent->mInfo.ticket_id && $gContent->mInfo.attributes[$fieldDef.field_id] == $fieldRow.id) || $fieldRow.is_default eq 1} selected="selected"{/if}
+                                        >{$fieldRow.field_value}</option>
+                                    {/foreach}
+                                    </select>
+                                    {formhelp note=$fieldDef.description}
+                                {/forminput}
+                                </div>
+                            {/if}
+						{/foreach}
 
 						<div class="row">
 							{formlabel label="Title" for="title"}
 							{forminput}
-								<input type="text" size="60" maxlength="200" name="tickets[title]" id="title" value="{$gContent->mInfo.title|escape}" />
+								<input type="text" size="60" maxlength="200" name="ticket[title]" id="title" value="{$gContent->mInfo.title|escape}" />
 							{/forminput}
 						</div>
 
-						<div class="row">
-							{formlabel label="Description" for="description"}
-							{forminput}
-								<input size="60" type="text" name="tickets[description]" id="description" value="{$gContent->mInfo.description|escape}" />
-								{formhelp note="Brief description of the page."}
-							{/forminput}
-						</div>
-
-						{textarea name="tickets[edit]"}{/textarea}
+						{textarea name="ticket[edit]"}{/textarea}
 
 						{* any simple service edit options *}
 						{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_mini_tpl}
