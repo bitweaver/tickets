@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_tickets/remove_tickets.php,v 1.1 2008/11/19 23:15:13 pppspoonman Exp $
+ * $Header: /cvsroot/bitweaver/_bit_tickets/remove_tickets.php,v 1.2 2008/11/20 00:05:32 pppspoonman Exp $
  *
  * Copyright (c) 2004 bitweaver.org
  * Copyright (c) 2003 tikwiki.org
@@ -8,7 +8,7 @@
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details
  *
- * $Id: remove_tickets.php,v 1.1 2008/11/19 23:15:13 pppspoonman Exp $
+ * $Id: remove_tickets.php,v 1.2 2008/11/20 00:05:32 pppspoonman Exp $
  * @package tickets
  * @subpackage functions
  */
@@ -17,7 +17,7 @@
  * required setup
  */
 require_once( '../bit_setup_inc.php' );
-include_once( TICKETS_PKG_PATH.'BitTickets.php');
+include_once( TICKETS_PKG_PATH.'BitTicket.php');
 include_once( TICKETS_PKG_PATH.'lookup_tickets_inc.php' );
 
 $gBitSystem->verifyPackage( 'tickets' );

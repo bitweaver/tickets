@@ -1,14 +1,14 @@
 <?php
 require_once('../../bit_setup_inc.php');
-require_once(TICKETS_PKG_PATH.'BitTickets.php');
+require_once(TICKETS_PKG_PATH.'BitTicket.php');
 
-class TestBitTickets extends Test {
+class TestBitTicket extends Test {
     
     var $test;
     var $id;
     var $count;
     
-    function TestBitTickets()
+    function TestBitTicket()
     {
         global $gBitSystem;
         Assert::equalsTrue($gBitSystem->isPackageActive( 'tickets' ), 'Package not active');
@@ -16,7 +16,7 @@ class TestBitTickets extends Test {
 
     function testCreateItem()
     {
-        $this->test = new BitTickets();
+        $this->test = new BitTicket();
         Assert::equalsTrue($this->test != NULL, 'Error during initialisation');
     }
 
@@ -52,7 +52,7 @@ class TestBitTickets extends Test {
     
     function testLoadItem()
     {
-        $this->test = new BitTickets($this->id);
+        $this->test = new BitTicket($this->id);
         Assert::equals($this->test->load(), 23);
     }
 

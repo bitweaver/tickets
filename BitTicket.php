@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.1 2008/11/19 23:59:37 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.1 2008/11/19 23:59:37 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.2 2008/11/20 00:05:32 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.2 2008/11/20 00:05:32 pppspoonman Exp $
 */
 
 /**
@@ -10,8 +10,8 @@
 *
 * date created 2004/8/15
 * @author spider <spider@steelsun.com>
-* @version $Revision: 1.1 $ $Date: 2008/11/19 23:59:37 $ $Author: pppspoonman $
-* @class BitTickets
+* @version $Revision: 1.2 $ $Date: 2008/11/20 00:05:32 $ $Author: pppspoonman $
+* @class BitTicket
 */
 
 require_once( LIBERTY_PKG_PATH.'LibertyMime.php' );
@@ -21,7 +21,7 @@ require_once( LIBERTY_PKG_PATH.'LibertyMime.php' );
 */
 define( 'BITTICKETS_CONTENT_TYPE_GUID', 'bittickets' );
 
-class BitTickets extends LibertyMime {
+class BitTicket extends LibertyMime {
 	/**
 	 * mTicketsId Primary key for our mythical Tickets class object & table
 	 * 
@@ -31,14 +31,14 @@ class BitTickets extends LibertyMime {
 	var $mTicketsId;
 
 	/**
-	 * BitTickets During initialisation, be sure to call our base constructors
+	 * BitTicket During initialisation, be sure to call our base constructors
 	 * 
 	 * @param numeric $pTicketsId 
 	 * @param numeric $pContentId 
 	 * @access public
 	 * @return void
 	 */
-	function BitTickets( $pTicketsId=NULL, $pContentId=NULL ) {
+	function BitTicket( $pTicketsId=NULL, $pContentId=NULL ) {
 		LibertyMime::LibertyMime();
 		$this->mTicketsId = $pTicketsId;
 		$this->mContentId = $pContentId;
@@ -46,9 +46,9 @@ class BitTickets extends LibertyMime {
 		$this->registerContentType( BITTICKETS_CONTENT_TYPE_GUID, array(
 			'content_type_guid'   => BITTICKETS_CONTENT_TYPE_GUID,
 			'content_description' => 'Tickets package with bare essentials',
-			'handler_class'       => 'BitTickets',
+			'handler_class'       => 'BitTicket',
 			'handler_package'     => 'tickets',
-			'handler_file'        => 'BitTickets.php',
+			'handler_file'        => 'BitTicket.php',
 			'maintainer_url'      => 'http://www.bitweaver.org'
 		));
 		// Permission setup

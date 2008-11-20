@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/admin/admin_tickets_inc.php,v 1.1 2008/11/19 23:15:14 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/admin/admin_tickets_inc.php,v 1.2 2008/11/20 00:05:32 pppspoonman Exp $
 // Copyright (c) 2005 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -10,7 +10,7 @@
 //	$gBitSmarty->assign('home_tickets', $_REQUEST["homeTickets"]);
 //}
 
-require_once( TICKETS_PKG_PATH.'BitTickets.php' );
+require_once( TICKETS_PKG_PATH.'BitTicket.php' );
 
 $formTicketsLists = array(
 	"tickets_list_tickets_id" => array(
@@ -42,7 +42,7 @@ if( $processForm ) {
 
 }
 
-$tickets = new BitTickets();
+$tickets = new BitTicket();
 $ticketss = $tickets->getList( $_REQUEST );
 $gBitSmarty->assign_by_ref('ticketss', $ticketss['data']);
 ?>

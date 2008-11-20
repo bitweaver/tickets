@@ -1,11 +1,11 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/list_tickets.php,v 1.2 2008/11/19 23:42:07 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/list_tickets.php,v 1.3 2008/11/20 00:05:32 pppspoonman Exp $
 // Copyright (c) 2004 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
 // Initialization
 require_once( '../bit_setup_inc.php' );
-require_once( TICKETS_PKG_PATH.'BitTickets.php' );
+require_once( TICKETS_PKG_PATH.'BitTicket.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'tickets' );
@@ -25,7 +25,7 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 		$formHash['delete'] = TRUE;
 		$formHash['submit_mult'] = 'remove_ticketss';
 		foreach( $_REQUEST["checked"] as $del ) {
-			$tmpPage = new BitTickets( $del);
+			$tmpPage = new BitTicket( $del);
 			if ( $tmpPage->load() && !empty( $tmpPage->mInfo['title'] )) {
 				$info = $tmpPage->mInfo['title'];
 			} else {
@@ -41,7 +41,7 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 		);
 	} else {
 		foreach( $_REQUEST["checked"] as $deleteId ) {
-			$tmpPage = new BitTickets( $deleteId );
+			$tmpPage = new BitTicket( $deleteId );
 			if( !$tmpPage->load() || !$tmpPage->expunge() ) {
 				array_merge( $errors, array_values( $tmpPage->mErrors ) );
 			}
@@ -53,7 +53,7 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 }
 
 // Create new tickets object
-$tickets = new BitTickets();
+$tickets = new BitTicket();
 $ticketssList = $tickets->getList( $_REQUEST );
 $gBitSmarty->assign_by_ref( 'ticketssList', $ticketssList );
 
