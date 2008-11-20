@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.1 2008/11/20 00:17:34 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.2 2008/11/20 00:22:16 pppspoonman Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -6,7 +6,7 @@
 	{if $smarty.request.preview}
 		<h2>Preview {$gContent->mInfo.title|escape}</h2>
 		<div class="preview">
-			{include file="bitpackage:tickets/tickets_display.tpl" page=`$gContent->mInfo.ticket_id`}
+			{include file="bitpackage:tickets/ticket_display.tpl" page=`$gContent->mInfo.ticket_id`}
 		</div>
 	{/if}
 

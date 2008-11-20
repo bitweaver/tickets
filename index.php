@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/index.php,v 1.3 2008/11/20 00:14:08 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/index.php,v 1.4 2008/11/20 00:22:16 pppspoonman Exp $
 // Copyright (c) 2004 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -30,5 +30,5 @@ $gContent->verifyViewPermission();
 $gContent->addHit();
 
 // Display the template
-$gBitSystem->display( 'bitpackage:tickets/tickets_display.tpl', tra( 'Tickets' ) , array( 'display_mode' => 'display' ));
+$gBitSystem->display( 'bitpackage:tickets/ticket_display.tpl', tra( 'Tickets' ) , array( 'display_mode' => 'display' ));
 ?>
