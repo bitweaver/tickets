@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.4 2008/11/20 21:10:19 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.4 2008/11/20 21:10:19 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.5 2008/11/21 23:56:50 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.5 2008/11/21 23:56:50 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.4 $ $Date: 2008/11/20 21:10:19 $ $Author: pppspoonman $
+* @version $Revision: 1.5 $ $Date: 2008/11/21 23:56:50 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -101,9 +101,9 @@ class BitTicket extends LibertyMime {
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
 				WHERE s.`$lookupColumn`=? $whereSql";
 
-            $attrQuery = "SELECT ta.*, tf.`field_guid`, tf.`field_value`
+            $attrQuery = "SELECT ta.*, tf.`field_id`, tf.`field_value`
                 FROM `".BIT_DB_PREFIX."ticket_attributes` ta
-                    LEFT JOIN `".BIT_DB_PREFIX."ticket_fields tf ON( ta.`field_id` = tf.`field_id` )
+                    LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values tf ON( ta.`field_id` = tf.`field_id` )
                 WHERE ta.`ticket_id`=?";
 
 			$result = $this->mDb->query( $query, $bindVars );
@@ -142,12 +142,12 @@ class BitTicket extends LibertyMime {
 	 * @return boolean TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
 	function store( &$pParamHash ) {
-//		$this->mDb->StartTrans();
+		$this->mDb->StartTrans();
 		if( $this->verify( $pParamHash )&& LibertyMime::store( $pParamHash ) ) {
-			$table = BIT_DB_PREFIX."ticketss";
+			$table = BIT_DB_PREFIX."tickets";
             $attrTable = BIT_DB_PREFIX."ticket_attributes";
+            
 
-			$this->mDb->StartTrans();
 			if( $this->mTicketId ) {
 				$locId = array( "ticket_id" => $pParamHash['ticket_id'] );
 				$result = $this->mDb->associateUpdate( $table, $pParamHash['ticket_store'], $locId );
@@ -174,10 +174,9 @@ class BitTicket extends LibertyMime {
 					$pParamHash['ticket_store']['ticket_id'] = $this->mDb->GenID( 'tickets_ticket_id_seq' );
 				}
 				$this->mTicketId = $pParamHash['ticket_store']['ticket_id'];
-
 				$result = $this->mDb->associateInsert( $table, $pParamHash['ticket_store'] );
 				
-                foreach( $pParamHash['attributes'] as $attr) {
+                foreach( $pParamHash['attributes_store'] as $attr) {
                     $result = $this->mDb->associateInsert( $attrTable, array( 'ticket_id' => $this->mTicketId, 'field_id' => $attr ) );
                 }
 			}
@@ -201,7 +200,7 @@ class BitTicket extends LibertyMime {
 	 */
 	function verify( &$pParamHash ) {
 		global $gBitUser, $gBitSystem;
-
+		
 		// make sure we're all loaded up of we have a mTicketId
 		if( $this->verifyId( $this->mTicketId ) && empty( $this->mInfo ) ) {
 			$this->load();
@@ -220,25 +219,11 @@ class BitTicket extends LibertyMime {
 			$pParamHash['ticket_store']['content_id'] = $pParamHash['content_id'];
 		}
 
-		// check some lengths, if too long, then truncate
-		if( $this->isValid() && !empty( $this->mInfo['description'] ) && empty( $pParamHash['description'] ) ) {
-			// someone has deleted the description, we need to null it out
-			$pParamHash['ticket_store']['description'] = '';
-		} else if( empty( $pParamHash['description'] ) ) {
-			unset( $pParamHash['description'] );
-		} else {
-			$pParamHash['ticket_store']['description'] = substr( $pParamHash['description'], 0, 200 );
-		}
-
-		if( !empty( $pParamHash['data'] ) ) {
-			$pParamHash['edit'] = $pParamHash['data'];
-		}
-
 		// check for name issues, first truncate length if too long
 		if( !empty( $pParamHash['title'] ) ) {
 			if( empty( $this->mTicketId ) ) {
 				if( empty( $pParamHash['title'] ) ) {
-					$this->mErrors['title'] = 'You must enter a name for this page.';
+					$this->mErrors['title'] = 'You must enter a name for this ticket.';
 				} else {
 					$pParamHash['content_store']['title'] = substr( $pParamHash['title'], 0, 160 );
 				}
@@ -248,6 +233,11 @@ class BitTicket extends LibertyMime {
 		} else if( empty( $pParamHash['title'] ) ) {
 			// no name specified
 			$this->mErrors['title'] = 'You must specify a name';
+		}
+		
+		if( !empty( $pParamHash['attributes'] ) ) {
+			$pParamHash['attributes_store']['attributes'] = $pParamHash['attributes'];
+			unset( $pParamHash['attributes'] );
 		}
 
 		return( count( $this->mErrors )== 0 );
@@ -328,26 +318,27 @@ class BitTicket extends LibertyMime {
 			WHERE lc.`content_type_guid` = ? $whereSql";
 		$result = $this->mDb->query( $query, $bindVars, $max_records, $offset );
 
-        $query_attr = "SELECT ta.*, tf.`field_guid`, tf.`field_value`
+        $query_attr = "SELECT ta.*, tf.`field_id`, tf.`field_value`
                 FROM `".BIT_DB_PREFIX."ticket_attributes` ta
-                    LEFT JOIN `".BIT_DB_PREFIX."ticket_fields tf ON( ta.`field_id` = tf.`field_id` )
+                    LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values tf ON( ta.`field_id` = tf.`field_id` )
                 WHERE ta.`ticket_id` IN ? $whereSql
-				ORDER BY tf.`field_guid`";
+				ORDER BY tf.`field_id`";
 		$ret = array();
 		$ids = array();
 		while( $res = $result->fetchRow() ) {
             $ids[] = $res['ticket_id'];
 			$ret[$res['ticket_id']] = $res;
 		}
+		
 		$pParamHash["cant"] = $this->mDb->getOne( $query_cant, $bindVars );
 		
 		if ( $pParamHash["cant"] > 0 ) {
 			$result = $this->mDb->query( $query_attr, array( $ids ) );
 			
 			while( $res = $result->fetchRow() ) 
-				$ret[$res['ticket_id']]['attributes'][$res['field_guid']] = $res;
+				$ret[$res['ticket_id']]['attributes'][$res['field_id']] = $res;
 		}
-
+		
 		// add all pagination info to pParamHash
 		LibertyContent::postGetList( $pParamHash );
 		return $ret;

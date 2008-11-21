@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.3 2008/11/20 21:11:52 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.4 2008/11/21 23:56:50 pppspoonman Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -26,10 +26,18 @@
 				{jstab}
 					{legend legend="Edit/Create Tickets Record"}
 						<input type="hidden" name="ticket[ticket_id]" value="{$gContent->mInfo.ticket_id}" />
+						
+						<div class="row">
+							{formlabel label="Title" for="title"}
+							{forminput}
+								<input type="text" size="60" maxlength="200" name="ticket[title]" id="title" value="{$gContent->mInfo.title|escape}" />
+								{formhelp note="Brief and meaningful summary of a ticket."}
+							{/forminput}
+						</div>
 
 						{foreach from=$fieldDefinitions item=fieldDef}
                             {if (($gContent->mInfo.ticket_id) || ($fieldDef.use_at_creation == 1)) }
-                                <div class="row {cycle values='odd,even'}">
+                                <div class="row">
                                 {formlabel label=$fieldDef.title|capitalize for=$fieldDef.field_id}
                                 {forminput}
                                     <select name="ticket[attributes][{$fieldDef.field_id}]" id="{$fieldDef.field_id}">
@@ -45,13 +53,6 @@
                             {/if}
 						{/foreach}
 
-						<div class="row">
-							{formlabel label="Title" for="title"}
-							{forminput}
-								<input type="text" size="60" maxlength="200" name="ticket[title]" id="title" value="{$gContent->mInfo.title|escape}" />
-							{/forminput}
-						</div>
-
 						{textarea name="ticket[edit]"}{/textarea}
 
 						{* any simple service edit options *}
@@ -59,7 +60,7 @@
 
 						<div class="row submit">
 							<input type="submit" name="preview" value="{tr}Preview{/tr}" /> 
-							<input type="submit" name="save_tickets" value="{tr}Save{/tr}" />
+							<input type="submit" name="save_ticket" value="{tr}Save{/tr}" />
 						</div>
 					{/legend}
 				{/jstab}

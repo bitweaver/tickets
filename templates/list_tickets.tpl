@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets.tpl,v 1.2 2008/11/20 00:14:08 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets.tpl,v 1.3 2008/11/21 23:56:50 pppspoonman Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -37,7 +37,7 @@
 					{/if}
 				</tr>
 
-				{foreach item=tickets from=$ticketssList}
+				{foreach item=tickets from=$ticketsList}
 					<tr class="{cycle values="even,odd"}">
 						{if $gBitSystem->isFeatureActive( 'tickets_list_ticket_id' )}
 							<td><a href="{$smarty.const.TICKETS_PKG_URL}index.php?ticket_id={$tickets.ticket_id|escape:"url"}" title="{$tickets.ticket_id}">{$tickets.ticket_id}</a></td>
