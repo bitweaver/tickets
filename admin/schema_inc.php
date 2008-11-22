@@ -11,7 +11,7 @@ $tables = array(
     ",
 
     'ticket_field_defs' => "
-        field_id I4 AUTO PRIMARY,
+        def_id I4 AUTO PRIMARY,
         title C(40),
         description C(100),
         use_at_creation I1 DEFAULT (1),
@@ -20,14 +20,14 @@ $tables = array(
     ",
 
     'ticket_field_values' => "
-        id I4 AUTO PRIMARY,
-        field_id I4 NOT NULL,
+        field_id I4 AUTO PRIMARY,
+        def_id I4 NOT NULL,
         field_value C(100),
         sort_order I4,
         is_default I1,
         is_deleted I1
         CONSTRAINT '
-            , CONSTRAINT `ticket_fval_fkey` FOREIGN KEY( `field_id` ) REFERENCES `".BIT_DB_PREFIX."ticket_field_defs` ( `field_id` )
+            , CONSTRAINT `ticket_fval_fkey` FOREIGN KEY( `def_id` ) REFERENCES `".BIT_DB_PREFIX."ticket_field_defs` ( `def_id` )
         '
     ",
     
@@ -37,16 +37,16 @@ $tables = array(
 		field_id I4 NOT NULL
 		CONSTRAINT '
     		, CONSTRAINT `ticketattr_ticket_fkey` FOREIGN KEY( `ticket_id` ) REFERENCES `".BIT_DB_PREFIX."tickets` ( `ticket_id` )
-			, CONSTRAINT `ticketattr_field_fkey` FOREIGN KEY( `field_id` ) REFERENCES `".BIT_DB_PREFIX."ticket_field_values` ( `id` )
+			, CONSTRAINT `ticketattr_field_fkey` FOREIGN KEY( `field_id` ) REFERENCES `".BIT_DB_PREFIX."ticket_field_values` ( `field_id` )
 		'    	
 	",
     
     'ticket_history' => "
-        field_id I4,
+        def_id I4,
         field_old_value I4,
         field_new_value I4
         CONSTRAINT '
-    		, CONSTRAINT `ticket_history_fkey` FOREIGN KEY( `field_id` ) REFERENCES `".BIT_DB_PREFIX."ticket_field_defs` ( `field_id` )'
+    		, CONSTRAINT `ticket_history_fkey` FOREIGN KEY( `def_id` ) REFERENCES `".BIT_DB_PREFIX."ticket_field_defs` ( `def_id` )'
     ",
 
     'ticket_queries' => "
@@ -57,12 +57,12 @@ $tables = array(
 
     'ticket_query_map' => "
         query_id I4 NOT NULL,
-        field_id I4 NOT NULL,
+        def_id I4 NOT NULL,
         sort_order I4 NOT NULL,
         sort_desc I1 DEFAULT (1)
         CONSTRAINT '
             , CONSTRAINT `ticketqmap_query_fkey` FOREIGN KEY( `query_id` ) REFERENCES `".BIT_DB_PREFIX."ticket_queries` ( `query_id` )
-            , CONSTRAINT `ticketqmap_field_fkey` FOREIGN KEY( `field_id` ) REFERENCES `".BIT_DB_PREFIX."ticket_field_defs` ( `field_id` )'
+            , CONSTRAINT `ticketqmap_field_fkey` FOREIGN KEY( `def_id` ) REFERENCES `".BIT_DB_PREFIX."ticket_field_defs` ( `def_id` )'
     ",
 
     'ticket_milestone' => "
@@ -87,7 +87,7 @@ foreach( array_keys( $tables ) AS $tableName ) {
 }
 
 $gBitInstaller->registerPackageInfo( TICKETS_PKG_NAME, array(
-	'description' => "Tickets package provide a simple system of tracking tasks, requests or bugs.",
+	'description' => "Tickets.",
 	'license' => '<a href="http://www.gnu.org/licenses/licenses.html#LGPL">LGPL</a>',
 ) );
 
@@ -105,7 +105,7 @@ $sequences = array (
 $gBitInstaller->registerSchemaSequences( TICKETS_PKG_NAME, $sequences );
 
 $insertTicketFieldDefs   = "INSERT INTO `".BIT_DB_PREFIX."ticket_field_defs` (`title`, `description, `sort_order`, `use_at_creation`, `is_enabled`)";
-$insertTicketFieldValues = "INSERT INTO `".BIT_DB_PREFIX."ticket_field_values` (`field_id`, `field_value`, `sort_order`, `is_default`, `is_deleted`)";
+$insertTicketFieldValues = "INSERT INTO `".BIT_DB_PREFIX."ticket_field_values` (`def_id`, `field_value`, `sort_order`, `is_default`, `is_deleted`)";
 
 $gBitInstaller->registerSchemaDefault( TICKETS_PKG_NAME, array(
 
