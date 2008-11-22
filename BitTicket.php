@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.7 2008/11/22 12:55:14 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.7 2008/11/22 12:55:14 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.8 2008/11/22 13:15:08 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.8 2008/11/22 13:15:08 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.7 $ $Date: 2008/11/22 12:55:14 $ $Author: pppspoonman $
+* @version $Revision: 1.8 $ $Date: 2008/11/22 13:15:08 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -306,9 +306,10 @@ class BitTicket extends LibertyMime {
 		}
 
 		$query = "
-			SELECT ts.*, lc.`title`, lc.`data` $selectSql
+			SELECT ts.*, lc.`title`, lc.`data`, uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name $selectSql
 			FROM `".BIT_DB_PREFIX."tickets` ts
 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
+				LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
 			WHERE lc.`content_type_guid` = ? $whereSql
 			ORDER BY ".$this->mDb->convertSortmode( $sort_mode );
 		$query_cant = "

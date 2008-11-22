@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets.tpl,v 1.5 2008/11/22 10:51:13 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets.tpl,v 1.6 2008/11/22 13:15:08 pppspoonman Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -23,6 +23,8 @@
 					{if $gBitSystem->isFeatureActive( 'tickets_list_title' ) eq 'y'}
 						<th>{smartlink ititle="Title" isort=title offset=$control.offset}</th>
 					{/if}
+					
+					<th>{tr}Creator{/tr}</th>
 
 					{foreach from=$fieldDefinitions item=field}
 						<th>{tr}{$field.title}{/tr}</th>
@@ -36,7 +38,7 @@
 						<th>{tr}Actions{/tr}</th>
 					{/if}
 				</tr>
-
+				
 				{foreach item=ticket from=$ticketsList}
 					<tr class="{cycle values="even,odd"}">
 						{if $gBitSystem->isFeatureActive( 'tickets_list_ticket_id' )}
@@ -46,6 +48,8 @@
 						{if $gBitSystem->isFeatureActive( 'tickets_list_title' )}
 							<td>{$ticket.title|escape}</td>
 						{/if}
+						
+						<td>{displayname login=$ticket.creator_user real_name=$ticket.creator_real_name}</td>
 						
 						{foreach from=$fieldDefinitions item=field}
 							<td>{$ticket.attributes[$field.def_id].field_value}</td>
