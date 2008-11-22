@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.6 2008/11/22 00:48:41 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.6 2008/11/22 00:48:41 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.7 2008/11/22 12:55:14 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.7 2008/11/22 12:55:14 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.6 $ $Date: 2008/11/22 00:48:41 $ $Author: pppspoonman $
+* @version $Revision: 1.7 $ $Date: 2008/11/22 12:55:14 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -101,7 +101,7 @@ class BitTicket extends LibertyMime {
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
 				WHERE s.`$lookupColumn`=? $whereSql";
 
-            $attrQuery = "SELECT ta.*, tf.`field_id`, tf.`field_value`
+            $attrQuery = "SELECT ta.*, tf.`def_id`, tf.`field_id`, tf.`field_value`
                 FROM `".BIT_DB_PREFIX."ticket_attributes` ta
                     LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values tf ON( ta.`field_id` = tf.`field_id` )
                 WHERE ta.`ticket_id`=?";
@@ -122,7 +122,7 @@ class BitTicket extends LibertyMime {
                 $attrResult = $this->mDb->query( $attrQuery, array ( $this->mTicketId ) );
                 
                 while ( $row = $attrResult->fetchRow() ) {
-                    $this->mAttributes[] = $row;
+                    $this->mAttributes[$row["def_id"]] = $row;
                 }
 
 				LibertyMime::load();

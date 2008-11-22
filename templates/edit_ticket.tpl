@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.6 2008/11/22 12:29:54 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.7 2008/11/22 12:55:14 pppspoonman Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -43,7 +43,7 @@
                                     <select name="ticket[attributes][{$fieldDef.def_id}]" id="{$fieldDef.def_id}">
                                     {foreach from=$fieldValues[$fieldDef.def_id] item=fieldRow}
                                         <option value="{$fieldRow.field_id}"
-                                        {if ($gContent->mInfo.ticket_id && $gContent->mInfo.attributes[$fieldDef.def_id] == $fieldRow.field_id) || $fieldRow.is_default eq 1} selected="selected"{/if}
+                                        {if ($gContent->mInfo.ticket_id && $gContent->mAttributes[$fieldDef.def_id].field_id == $fieldRow.field_id) || (empty($gContent->mInfo.ticket_id) && $fieldRow.is_default == 1)} selected="selected"{/if}
                                         >{$fieldRow.field_value}</option>
                                     {/foreach}
                                     </select>
