@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/list_tickets.php,v 1.5 2008/11/20 21:11:52 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/list_tickets.php,v 1.6 2008/11/22 00:48:41 pppspoonman Exp $
 // Copyright (c) 2008 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -54,8 +54,10 @@ if( isset( $_REQUEST["submit_mult"] ) && isset( $_REQUEST["checked"] ) && $_REQU
 
 // Create new tickets object
 $tickets = new BitTicket();
-$ticketssList = $tickets->getList( $_REQUEST );
-$gBitSmarty->assign_by_ref( 'ticketsList', $ticketssList );
+$ticketsList = $tickets->getList( $_REQUEST );
+$gBitSmarty->assign_by_ref( 'ticketsList', $ticketsList );
+
+vd($ticketsList);
 
 $fieldDefinitions = BitTicket::getFieldDefinitions ();
 $gBitSmarty->assign_by_ref( 'fieldDefinitions', $fieldDefinitions );

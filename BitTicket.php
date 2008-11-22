@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.5 2008/11/21 23:56:50 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.5 2008/11/21 23:56:50 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.6 2008/11/22 00:48:41 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.6 2008/11/22 00:48:41 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.5 $ $Date: 2008/11/21 23:56:50 $ $Author: pppspoonman $
+* @version $Revision: 1.6 $ $Date: 2008/11/22 00:48:41 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -236,7 +236,7 @@ class BitTicket extends LibertyMime {
 		}
 		
 		if( !empty( $pParamHash['attributes'] ) ) {
-			$pParamHash['attributes_store']['attributes'] = $pParamHash['attributes'];
+			$pParamHash['attributes_store'] = $pParamHash['attributes'];
 			unset( $pParamHash['attributes'] );
 		}
 
@@ -318,11 +318,7 @@ class BitTicket extends LibertyMime {
 			WHERE lc.`content_type_guid` = ? $whereSql";
 		$result = $this->mDb->query( $query, $bindVars, $max_records, $offset );
 
-        $query_attr = "SELECT ta.*, tf.`field_id`, tf.`field_value`
-                FROM `".BIT_DB_PREFIX."ticket_attributes` ta
-                    LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values tf ON( ta.`field_id` = tf.`field_id` )
-                WHERE ta.`ticket_id` IN ? $whereSql
-				ORDER BY tf.`field_id`";
+        
 		$ret = array();
 		$ids = array();
 		while( $res = $result->fetchRow() ) {
@@ -333,10 +329,19 @@ class BitTicket extends LibertyMime {
 		$pParamHash["cant"] = $this->mDb->getOne( $query_cant, $bindVars );
 		
 		if ( $pParamHash["cant"] > 0 ) {
-			$result = $this->mDb->query( $query_attr, array( $ids ) );
+			$in = implode(',', array_fill(0, $pParamHash["cant"], '?'));
+			
+			$query_attr = "SELECT ta.*, td.`def_id`, tf.`field_id`, tf.`field_value`
+                FROM `".BIT_DB_PREFIX."ticket_attributes` ta
+                    LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values tf ON( ta.`field_id` = tf.`field_id` )
+					LEFT JOIN `".BIT_DB_PREFIX."ticket_field_defs td ON( tf.`def_id` = td.`def_id` )
+                WHERE ta.`ticket_id` IN ($in) $whereSql
+				ORDER BY td.`sort_order`";
+				
+			$result = $this->mDb->query( $query_attr, $ids );
 			
 			while( $res = $result->fetchRow() ) 
-				$ret[$res['ticket_id']]['attributes'][$res['field_id']] = $res;
+				$ret[$res['ticket_id']]['attributes'][$res['def_id']] = $res;
 		}
 		
 		// add all pagination info to pParamHash
@@ -372,7 +377,7 @@ class BitTicket extends LibertyMime {
 		$ret = array ();
 		
 		while( $res = $result->fetchRow() ) {
-			$ret[$res['field_id']][] = $res;
+			$ret[$res['def_id']][] = $res;
 		}
 		
 		return $ret;

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets.tpl,v 1.3 2008/11/21 23:56:50 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets.tpl,v 1.4 2008/11/22 00:48:41 pppspoonman Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -17,7 +17,7 @@
 			<table class="data">
 				<tr>
 					{if $gBitSystem->isFeatureActive( 'tickets_list_ticket_id' ) eq 'y'}
-						<th>{smartlink ititle="Tickets Id" isort=ticket_id offset=$control.offset iorder=desc idefault=1}</th>
+						<th>{smartlink ititle="Ticket Id" isort=ticket_id offset=$control.offset iorder=desc idefault=1}</th>
 					{/if}
 
 					{if $gBitSystem->isFeatureActive( 'tickets_list_title' ) eq 'y'}
@@ -27,6 +27,10 @@
 					{if $gBitSystem->isFeatureActive( 'tickets_list_description' ) eq 'y'}
 						<th>{smartlink ititle="Description" isort=description offset=$control.offset}</th>
 					{/if}
+					
+					{foreach from=$fieldDefinitions item=field}
+						<th>{tr}{$field.title}{/tr}</th>
+					{/foreach}
 
 					{if $gBitSystem->isFeatureActive( 'tickets_list_data' ) eq 'y'}
 						<th>{smartlink ititle="Text" isort=data offset=$control.offset}</th>
@@ -37,28 +41,34 @@
 					{/if}
 				</tr>
 
-				{foreach item=tickets from=$ticketsList}
+				{foreach item=ticket from=$ticketsList}
 					<tr class="{cycle values="even,odd"}">
 						{if $gBitSystem->isFeatureActive( 'tickets_list_ticket_id' )}
-							<td><a href="{$smarty.const.TICKETS_PKG_URL}index.php?ticket_id={$tickets.ticket_id|escape:"url"}" title="{$tickets.ticket_id}">{$tickets.ticket_id}</a></td>
+							<td><a href="{$smarty.const.TICKETS_PKG_URL}index.php?ticket_id={$ticket.ticket_id|escape:"url"}" title="{$ticket.ticket_id}">{$ticket.ticket_id}</a></td>
 						{/if}
 
 						{if $gBitSystem->isFeatureActive( 'tickets_list_title' )}
-							<td>{$tickets.title|escape}</td>
+							<td>{$ticket.title|escape}</td>
 						{/if}
+						
+						{foreach from=$fieldDefinitions item=field}
+							<td>{$ticket.attributes[$field.def_id].field_value}</td>
+						{/foreach}
+						
+						
 
 						{if $gBitSystem->isFeatureActive( 'tickets_list_description' )}
-							<td>{$tickets.description|escape}</td>
+							<td>{$ticket.description|escape}</td>
 						{/if}
 
 						{if $gBitSystem->isFeatureActive( 'tickets_list_data' )}
-							<td>{$tickets.data|escape}</td>
+							<td>{$ticket.data|escape}</td>
 						{/if}
 
 						{if $gBitUser->hasPermission( 'p_tickets_update' )}
 							<td class="actionicon">
-								{smartlink ititle="Edit" ifile="edit.php" ibiticon="icons/accessories-text-editor" ticket_id=$tickets.ticket_id}
-								<input type="checkbox" name="checked[]" title="{$tickets.title|escape}" value="{$tickets.ticket_id}" />
+								{smartlink ititle="Edit" ifile="edit.php" ibiticon="icons/accessories-text-editor" ticket_id=$ticket.ticket_id}
+								<input type="checkbox" name="checked[]" title="{$ticket.title|escape}" value="{$ticket.ticket_id}" />
 							</td>
 						{/if}
 					</tr>
