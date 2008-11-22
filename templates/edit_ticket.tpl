@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.5 2008/11/22 00:28:45 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.6 2008/11/22 12:29:54 pppspoonman Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -50,6 +50,14 @@
                                     {formhelp note=$fieldDef.description}
                                 {/forminput}
                                 </div>
+                            {else}
+                            	<input type="hidden" name="ticket[attributes][{$fieldDef.def_id}]" id="{$fieldDef.def_id}"
+                            	{foreach from=$fieldValues[$fieldDef.def_id] item=fieldRow}
+                            		{if ($fieldRow.is_default == 1) }
+                            			value="{$fieldRow.field_id}"
+                            		{/if}
+                            	{/foreach}
+                            	>
                             {/if}
 						{/foreach}
 
