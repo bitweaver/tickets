@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets.tpl,v 1.4 2008/11/22 00:48:41 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets.tpl,v 1.5 2008/11/22 10:51:13 pppspoonman Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -24,10 +24,6 @@
 						<th>{smartlink ititle="Title" isort=title offset=$control.offset}</th>
 					{/if}
 
-					{if $gBitSystem->isFeatureActive( 'tickets_list_description' ) eq 'y'}
-						<th>{smartlink ititle="Description" isort=description offset=$control.offset}</th>
-					{/if}
-					
 					{foreach from=$fieldDefinitions item=field}
 						<th>{tr}{$field.title}{/tr}</th>
 					{/foreach}
@@ -55,12 +51,6 @@
 							<td>{$ticket.attributes[$field.def_id].field_value}</td>
 						{/foreach}
 						
-						
-
-						{if $gBitSystem->isFeatureActive( 'tickets_list_description' )}
-							<td>{$ticket.description|escape}</td>
-						{/if}
-
 						{if $gBitSystem->isFeatureActive( 'tickets_list_data' )}
 							<td>{$ticket.data|escape}</td>
 						{/if}

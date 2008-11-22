@@ -154,7 +154,6 @@ $gBitInstaller->registerPreferences( TICKETS_PKG_NAME, array(
 	array( TICKETS_PKG_NAME, 'tickets_default_ordering', 'ticket_id_desc' ),
 	array( TICKETS_PKG_NAME, 'tickets_list_ticket_id', 'y' ),
 	array( TICKETS_PKG_NAME, 'tickets_list_title', 'y' ),
-	array( TICKETS_PKG_NAME, 'tickets_list_description', 'y' ),
 	array( TICKETS_PKG_NAME, 'tickets_list_tickets', 'y' ),
 ) );
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/admin/admin_tickets_inc.php,v 1.3 2008/11/20 00:14:08 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/admin/admin_tickets_inc.php,v 1.4 2008/11/22 10:51:13 pppspoonman Exp $
 // Copyright (c) 2005 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -20,10 +20,6 @@ $formTicketsLists = array(
 	"tickets_list_title" => array(
 		'label' => 'Title',
 		'note' => 'Display the title.',
-	),
-	"tickets_list_description" => array(
-		'label' => 'Description',
-		'note' => 'Display the description.',
 	),
 	"tickets_list_data" => array(
 		'label' => 'Text',
