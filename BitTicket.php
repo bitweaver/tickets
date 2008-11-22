@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.8 2008/11/22 13:15:08 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.8 2008/11/22 13:15:08 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.9 2008/11/22 13:55:19 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.9 2008/11/22 13:55:19 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.8 $ $Date: 2008/11/22 13:15:08 $ $Author: pppspoonman $
+* @version $Revision: 1.9 $ $Date: 2008/11/22 13:55:19 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -253,7 +253,11 @@ class BitTicket extends LibertyMime {
 		$ret = FALSE;
 		if( $this->isValid() ) {
 			$this->mDb->StartTrans();
+			$attrQuery = "DELETE FROM `".BIT_DB_PREFIX."ticket_attributes` WHERE `ticket_id` = ?";
 			$query = "DELETE FROM `".BIT_DB_PREFIX."tickets` WHERE `content_id` = ?";
+			
+			// first delete attributes not to violate constraints
+			$attrResult = $this->mDb->query( $attrQuery, array( $this->mTicketId) );
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
 			if( LibertyMime::expunge() ) {
 				$ret = TRUE;

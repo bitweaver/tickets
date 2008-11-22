@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets.tpl,v 1.6 2008/11/22 13:15:08 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets.tpl,v 1.7 2008/11/22 13:55:19 pppspoonman Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -83,7 +83,7 @@
 					<select name="submit_mult" onchange="this.form.submit();">
 						<option value="" selected="selected">{tr}with checked{/tr}:</option>
 						{if $gBitUser->hasPermission( 'p_tickets_update' )}
-							<option value="remove_ticketss">{tr}remove{/tr}</option>
+							<option value="remove_tickets">{tr}remove{/tr}</option>
 						{/if}
 					</select>
 
