@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.4 2008/11/21 23:56:50 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.5 2008/11/22 00:28:45 pppspoonman Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -38,12 +38,12 @@
 						{foreach from=$fieldDefinitions item=fieldDef}
                             {if (($gContent->mInfo.ticket_id) || ($fieldDef.use_at_creation == 1)) }
                                 <div class="row">
-                                {formlabel label=$fieldDef.title|capitalize for=$fieldDef.field_id}
+                                {formlabel label=$fieldDef.title|capitalize for=$fieldDef.def_id}
                                 {forminput}
-                                    <select name="ticket[attributes][{$fieldDef.field_id}]" id="{$fieldDef.field_id}">
-                                    {foreach from=$fieldValues[$fieldDef.field_id] item=fieldRow}
-                                        <option value="{$fieldRow.id}"
-                                        {if ($gContent->mInfo.ticket_id && $gContent->mInfo.attributes[$fieldDef.field_id] == $fieldRow.id) || $fieldRow.is_default eq 1} selected="selected"{/if}
+                                    <select name="ticket[attributes][{$fieldDef.def_id}]" id="{$fieldDef.def_id}">
+                                    {foreach from=$fieldValues[$fieldDef.def_id] item=fieldRow}
+                                        <option value="{$fieldRow.field_id}"
+                                        {if ($gContent->mInfo.ticket_id && $gContent->mInfo.attributes[$fieldDef.def_id] == $fieldRow.field_id) || $fieldRow.is_default eq 1} selected="selected"{/if}
                                         >{$fieldRow.field_value}</option>
                                     {/foreach}
                                     </select>
