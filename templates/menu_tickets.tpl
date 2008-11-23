@@ -7,5 +7,8 @@
 		{if $gBitUser->hasPermission( 'p_tickets_create' )}
 			<li><a class="item" href="{$smarty.const.TICKETS_PKG_URL}edit.php">{tr}Create Ticket{/tr}</a></li>
 		{/if}
+		{if $gBitUser->hasPermission( 'p_tickets_milestone_create' )}
+			<li><a class="item" href="{$smarty.const.TICKETS_PKG_URL}edit_milestone.php">{tr}Create Milestone{/tr}</a></li>
+		{/if}
 	</ul>
 {/strip}

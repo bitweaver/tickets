@@ -56,7 +56,7 @@ $tables = array(
     ",
 
     'ticket_query_map' => "
-        query_id I4 NOT NULL,
+        query_id I4 PRIMARY,
         def_id I4 NOT NULL,
         sort_order I4 NOT NULL,
         sort_desc I1 DEFAULT (1)
@@ -66,10 +66,10 @@ $tables = array(
     ",
 
     'ticket_milestone' => "
-        milestone_id I4,
+        milestone_id I4 PRIMARY,
         content_id I4,
-        date_from I4,
-        date_to I4
+        date_from I8 NOT NULL,
+        date_to I8 NOT NULL
         CONSTRAINT '
     		, CONSTRAINT `ticket_milestone_fkey` FOREIGN KEY( `content_id` ) REFERENCES `".BIT_DB_PREFIX."liberty_content` ( `content_id` )'
     ",
@@ -144,9 +144,12 @@ $gBitInstaller->registerSchemaDefault( TICKETS_PKG_NAME, array(
 // ### Default UserPermissions
 $gBitInstaller->registerUserPermissions( TICKETS_PKG_NAME, array(
 	array( 'p_tickets_admin', 'Can admin tickets', 'admin', TICKETS_PKG_NAME ),
-	array( 'p_tickets_create', 'Can create a tickets', 'registered', TICKETS_PKG_NAME ),
-	array( 'p_tickets_update', 'Can update any tickets', 'editors', TICKETS_PKG_NAME ),
+	array( 'p_tickets_create', 'Can create tickets', 'registered', TICKETS_PKG_NAME ),
+	array( 'p_tickets_update', 'Can update any ticket', 'editors', TICKETS_PKG_NAME ),
 	array( 'p_tickets_view', 'Can view tickets', 'basic',  TICKETS_PKG_NAME ),
+	array( 'p_tickets_assignee', 'Can be an assignee for a ticket', 'editors', TICKETS_PKG_NAME ),
+	array( 'p_tickets_milestone_create', 'Can create milestones', 'editors', TICKETS_PKG_NAME ),
+	array( 'p_tickets_milestone_update', 'Can update milestones', 'editors', TICKETS_PKG_NAME )
 ) );
 
 // ### Default Preferences
