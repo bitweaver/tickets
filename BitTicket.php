@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.9 2008/11/22 13:55:19 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.9 2008/11/22 13:55:19 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.10 2008/11/23 18:55:51 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.10 2008/11/23 18:55:51 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.9 $ $Date: 2008/11/22 13:55:19 $ $Author: pppspoonman $
+* @version $Revision: 1.10 $ $Date: 2008/11/23 18:55:51 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -101,9 +101,10 @@ class BitTicket extends LibertyMime {
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
 				WHERE s.`$lookupColumn`=? $whereSql";
 
-            $attrQuery = "SELECT ta.*, tf.`def_id`, tf.`field_id`, tf.`field_value`
+            $attrQuery = "SELECT ta.*, tf.`def_id`, tf.`field_id`, tf.`field_value`, td.`title` AS `def_title`
                 FROM `".BIT_DB_PREFIX."ticket_attributes` ta
                     LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values tf ON( ta.`field_id` = tf.`field_id` )
+					LEFT JOIN `".BIT_DB_PREFIX."ticket_field_defs td ON( tf.`def_id` = td.`def_id` )
                 WHERE ta.`ticket_id`=?";
 
 			$result = $this->mDb->query( $query, $bindVars );

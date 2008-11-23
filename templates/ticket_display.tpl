@@ -12,10 +12,25 @@
 	</div><!-- end .floaticon -->
 
 	<div class="header">
-		<h1>{$gContent->mInfo.title|escape|default:"Tickets"}</h1>
-		<p>{$gContent->mInfo.description|escape}</p>
+		<h1>{tr}Ticket{/tr} {$gContent->mTicketId} - {$gContent->mInfo.title|escape}</h1>
+		
 		<div class="date">
 			{tr}Created by{/tr}: {displayname user=$gContent->mInfo.creator_user user_id=$gContent->mInfo.creator_user_id real_name=$gContent->mInfo.creator_real_name}, {tr}Last modification by{/tr}: {displayname user=$gContent->mInfo.modifier_user user_id=$gContent->mInfo.modifier_user_id real_name=$gContent->mInfo.modifier_real_name}, {$gContent->mInfo.last_modified|bit_long_datetime}
+		</div>
+		
+		<div class="details">
+		
+		{foreach from=$gContent->mAttributes item=attr}
+            <div class="row">
+            	<p><b>{tr}{$attr.def_title}{/tr}</b>: {tr}{$attr.field_value}{/tr}
+            </div>  
+		{/foreach}
+		
+		<div class="row">
+        	<p><b>{tr}Title{/tr}</b>: {$gContent->mInfo.title|escape}
+        </div>
+		
+		
 		</div>
 	</div><!-- end .header -->
 
