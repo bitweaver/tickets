@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.1 2008/11/23 23:21:06 pppspoonman Exp $
-* $Id: BitMilestone.php,v 1.1 2008/11/23 23:21:06 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.2 2008/11/23 23:21:54 pppspoonman Exp $
+* $Id: BitMilestone.php,v 1.2 2008/11/23 23:21:54 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.1 $ $Date: 2008/11/23 23:21:06 $ $Author: pppspoonman $
+* @version $Revision: 1.2 $ $Date: 2008/11/23 23:21:54 $ $Author: pppspoonman $
 * @class BitMilestone
 */
 
@@ -237,8 +237,6 @@ class BitMilestone extends LibertyMime {
 		if( !empty( $pParamHash['date_to'] ) ) {
 			$pParamHash['milestone_store']['date_to'] = $pParamHash['date_to'];
 		}
-		
-		vd($pParamHash);
 		
 		if( !empty( $pParamHash['data'] ) ) {
 			$pParamHash['edit'] = $pParamHash['data'];

@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/edit_milestone.php,v 1.1 2008/11/23 23:21:06 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/edit_milestone.php,v 1.2 2008/11/23 23:21:54 pppspoonman Exp $
 // Copyright (c) 2004 bitweaver Milestones
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -38,8 +38,6 @@ if( isset( $_REQUEST["preview"] ) ) {
 } else {
 	$gContent->invokeServices( 'content_edit_function' );
 }
-
-vd ($_REQUEST);
 
 // Pro
 // Check if the page has changed
