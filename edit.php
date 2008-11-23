@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/edit.php,v 1.3 2008/11/20 21:10:19 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/edit.php,v 1.4 2008/11/23 22:34:15 pppspoonman Exp $
 // Copyright (c) 2004 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -21,10 +21,6 @@ if( $gContent->isValid() ){
 
 if( isset( $_REQUEST['ticket']["title"] ) ) {
 	$gContent->mInfo["title"] = $_REQUEST['ticket']["title"];
-}
-
-if( isset( $_REQUEST['ticket']["description"] ) ) {
-	$gContent->mInfo["description"] = $_REQUEST['ticket']["description"];
 }
 
 if( isset( $_REQUEST["format_guid"] ) ) {
