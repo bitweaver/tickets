@@ -22,12 +22,12 @@
 		
 		{foreach from=$gContent->mAttributes item=attr}
             <div class="row">
-            	<p><b>{tr}{$attr.def_title}{/tr}</b>: {tr}{$attr.field_value}{/tr}
+            	<p><b>{tr}{$attr.def_title}{/tr}</b>: {tr}{$attr.field_value}{/tr}</p>
             </div>  
 		{/foreach}
 		
 		<div class="row">
-        	<p><b>{tr}Title{/tr}</b>: {$gContent->mInfo.title|escape}
+        	<p><b>{tr}Title{/tr}</b>: {$gContent->mInfo.title|escape}</p>
         </div>
 		
 		
