@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.2 2008/11/23 23:21:54 pppspoonman Exp $
-* $Id: BitMilestone.php,v 1.2 2008/11/23 23:21:54 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.3 2008/11/23 23:30:35 pppspoonman Exp $
+* $Id: BitMilestone.php,v 1.3 2008/11/23 23:30:35 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.2 $ $Date: 2008/11/23 23:21:54 $ $Author: pppspoonman $
+* @version $Revision: 1.3 $ $Date: 2008/11/23 23:30:35 $ $Author: pppspoonman $
 * @class BitMilestone
 */
 
@@ -103,14 +103,15 @@ class BitMilestone extends LibertyMime {
 				uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name
 				$selectSql
 				FROM `".BIT_DB_PREFIX."ticket_milestone` tm
-					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = s.`content_id` ) $joinSql
+					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = tm.`content_id` ) $joinSql
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = lc.`modifier_user_id` )
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
-				WHERE s.`$lookupColumn`=? $whereSql";
+				WHERE tm.`$lookupColumn`=? $whereSql";
 
-            $ticketQuery = "SELECT tmm.*, 
+            $ticketQuery = "SELECT tmm.*, ts.`ticket_id`, lc.`title`
                 FROM `".BIT_DB_PREFIX."ticket_milestone_map` tmm
-                    LEFT JOIN `".BIT_DB_PREFIX."ticket_fields tf ON( ta.`field_id` = tf.`field_id` )
+                    LEFT JOIN `".BIT_DB_PREFIX."tickets ts ON( tmm.`ticket_id` = ts.`ticket_id` )
+					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
                 WHERE tmm.`milestone_id`=?";
 
 			$result = $this->mDb->query( $query, $bindVars );
@@ -126,10 +127,10 @@ class BitMilestone extends LibertyMime {
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				$this->mInfo['parsed_data'] = $this->parseData();
 
-                $attrResult = $this->mDb->query( $attrQuery, array ( $this->mMilestoneId ) );
+                $ticketResult = $this->mDb->query( $ticketQuery, array ( $this->mMilestoneId ) );
                 
-                while ( $row = $attrResult->fetchRow() ) {
-                    $this->mAttributes[] = $row;
+                while ( $row = $ticketResult->fetchRow() ) {
+                    $this->mTickets[] = $row;
                 }
 
 				LibertyMime::load();
