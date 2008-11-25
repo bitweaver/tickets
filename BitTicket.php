@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.10 2008/11/23 18:55:51 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.10 2008/11/23 18:55:51 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.11 2008/11/25 00:23:47 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.11 2008/11/25 00:23:47 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.10 $ $Date: 2008/11/23 18:55:51 $ $Author: pppspoonman $
+* @version $Revision: 1.11 $ $Date: 2008/11/25 00:23:47 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -284,10 +284,11 @@ class BitTicket extends LibertyMime {
 	 * getList This function generates a list of records from the liberty_content database for use in a list page
 	 * 
 	 * @param array $pParamHash 
+     * @param array $idList List of ticket identifiers
 	 * @access public
 	 * @return array List of ticketss
 	 */
-	function getList( &$pParamHash ) {
+	function getList( &$pParamHash, $idList=NULL) {
 		global $gBitSystem, $gBitUser;
 		// this makes sure parameters used later on are set
 		LibertyContent::prepGetList( $pParamHash );
@@ -309,6 +310,11 @@ class BitTicket extends LibertyMime {
 			$whereSql .= " AND UPPER( lc.`title` )like ? ";
 			$bindVars[] = '%' . strtoupper( $find ). '%';
 		}
+
+        if( is_array( $idList ) ) {
+			$whereSql .= " AND ts.`ticket_id` IN( ".implode( ',',array_fill( 0,count( $idList ),'?' ) )." )";
+			$bindVars = array_merge ( $bindVars, $idList );
+        }
 
 		$query = "
 			SELECT ts.*, lc.`title`, lc.`data`, uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name $selectSql
