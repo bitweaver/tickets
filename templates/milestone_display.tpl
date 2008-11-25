@@ -19,20 +19,18 @@
 		</div>
 		
 		<div class="body">
+			<div class="row">
+				{tr}From{/tr} {$gContent->mDateFrom} {tr}to{/tr} {$gContent->mDateTo}
+			</div>
+			
 			<div class="content">
 				{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$gContent->mInfo}
 				{$gContent->mInfo.parsed_data}
 			</div><!-- end .content -->
 		</div><!-- end .body -->
 		
-		<div class="details">
-
+		<div class="listing tickets">
 	        {include file="list_tickets_inc.tpl" ticketsList=$gContent->mTickets fieldDefinitions=$fieldDefinitions}
-			
-			<div class="row">
-	        	<p><b>{tr}Title{/tr}</b>: {$gContent->mInfo.title|escape}</p>
-	        </div>
-		
 		</div>
 	</div><!-- end .header -->
 
