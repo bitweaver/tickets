@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.11 2008/11/25 00:23:47 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.11 2008/11/25 00:23:47 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.12 2008/11/25 23:33:56 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.12 2008/11/25 23:33:56 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.11 $ $Date: 2008/11/25 00:23:47 $ $Author: pppspoonman $
+* @version $Revision: 1.12 $ $Date: 2008/11/25 23:33:56 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -347,7 +347,7 @@ class BitTicket extends LibertyMime {
                 FROM `".BIT_DB_PREFIX."ticket_attributes` ta
                     LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values tf ON( ta.`field_id` = tf.`field_id` )
 					LEFT JOIN `".BIT_DB_PREFIX."ticket_field_defs td ON( tf.`def_id` = td.`def_id` )
-                WHERE ta.`ticket_id` IN ($in) $whereSql
+                WHERE ta.`ticket_id` IN ($in)
 				ORDER BY td.`sort_order`";
 				
 			$result = $this->mDb->query( $query_attr, $ids );

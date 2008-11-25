@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.4 2008/11/25 00:11:57 pppspoonman Exp $
-* $Id: BitMilestone.php,v 1.4 2008/11/25 00:11:57 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.5 2008/11/25 23:33:56 pppspoonman Exp $
+* $Id: BitMilestone.php,v 1.5 2008/11/25 23:33:56 pppspoonman Exp $
 */
 
 /**
@@ -10,11 +10,12 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.4 $ $Date: 2008/11/25 00:11:57 $ $Author: pppspoonman $
+* @version $Revision: 1.5 $ $Date: 2008/11/25 23:33:56 $ $Author: pppspoonman $
 * @class BitMilestone
 */
 
 require_once( LIBERTY_PKG_PATH.'LibertyMime.php' );
+require_once( TICKETS_PKG_PATH.'BitTicket.php' );
 
 /**
 * This is used to uniquely identify the object
@@ -108,10 +109,9 @@ class BitMilestone extends LibertyMime {
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
 				WHERE tm.`$lookupColumn`=? $whereSql";
 
-            $ticketQuery = "SELECT tmm.ticket_id 
-                FROM `".BIT_DB_PREFIX."ticket_milestone_map` tmm $selectSql
-					$joinSql
-                WHERE tmm.`milestone_id`=? $whereSql";
+            $ticketQuery = "SELECT tmm.ticket_id
+                FROM `".BIT_DB_PREFIX."ticket_milestone_map` tmm 
+                WHERE tmm.`milestone_id`=?";
 
 			$result = $this->mDb->query( $query, $bindVars );
 
@@ -126,9 +126,11 @@ class BitMilestone extends LibertyMime {
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				$this->mInfo['parsed_data'] = $this->parseData();
 
-                $ticketResult = $this->mDb->query( $ticketQuery, array ( $this->mMilestoneId ) );
+                $ticketResult = $this->mDb->getCol( $ticketQuery, array ( $this->mMilestoneId ) );
 
-                $this->mTickets = BitTicket::getList( NULL, $ticketResult );
+				$ticket = new BitTicket();
+				$pParamHash = array ();
+                $this->mTickets = $ticket->getList( $pParamHash, $ticketResult );
                 
 				LibertyMime::load();
 			}
