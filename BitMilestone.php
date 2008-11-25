@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.3 2008/11/23 23:30:35 pppspoonman Exp $
-* $Id: BitMilestone.php,v 1.3 2008/11/23 23:30:35 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.4 2008/11/25 00:11:57 pppspoonman Exp $
+* $Id: BitMilestone.php,v 1.4 2008/11/25 00:11:57 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.3 $ $Date: 2008/11/23 23:30:35 $ $Author: pppspoonman $
+* @version $Revision: 1.4 $ $Date: 2008/11/25 00:11:57 $ $Author: pppspoonman $
 * @class BitMilestone
 */
 
@@ -108,11 +108,10 @@ class BitMilestone extends LibertyMime {
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
 				WHERE tm.`$lookupColumn`=? $whereSql";
 
-            $ticketQuery = "SELECT tmm.*, ts.`ticket_id`, lc.`title`
-                FROM `".BIT_DB_PREFIX."ticket_milestone_map` tmm
-                    LEFT JOIN `".BIT_DB_PREFIX."tickets ts ON( tmm.`ticket_id` = ts.`ticket_id` )
-					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
-                WHERE tmm.`milestone_id`=?";
+            $ticketQuery = "SELECT tmm.ticket_id 
+                FROM `".BIT_DB_PREFIX."ticket_milestone_map` tmm $selectSql
+					$joinSql
+                WHERE tmm.`milestone_id`=? $whereSql";
 
 			$result = $this->mDb->query( $query, $bindVars );
 
@@ -128,11 +127,9 @@ class BitMilestone extends LibertyMime {
 				$this->mInfo['parsed_data'] = $this->parseData();
 
                 $ticketResult = $this->mDb->query( $ticketQuery, array ( $this->mMilestoneId ) );
-                
-                while ( $row = $ticketResult->fetchRow() ) {
-                    $this->mTickets[] = $row;
-                }
 
+                $this->mTickets = BitTicket::getList( NULL, $ticketResult );
+                
 				LibertyMime::load();
 			}
 		}
@@ -325,23 +322,25 @@ class BitMilestone extends LibertyMime {
 		}
 
 		$query = "
-			SELECT ts.*, lc.`title`, lc.`data` $selectSql
-			FROM `".BIT_DB_PREFIX."tickets` ts
-				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
+			SELECT tm.*, lc.`title`, lc.`data` $selectSql
+			FROM `".BIT_DB_PREFIX."ticket_milestone` tm
+				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = tm.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql
 			ORDER BY ".$this->mDb->convertSortmode( $sort_mode );
 		$query_cant = "
 			SELECT COUNT(*)
-			FROM `".BIT_DB_PREFIX."tickets` ts
-				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
+			FROM `".BIT_DB_PREFIX."ticket_milestone` tm
+				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = tm.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql";
 		$result = $this->mDb->query( $query, $bindVars, $max_records, $offset );
 
-        $query_attr = "SELECT ta.*, tf.`field_guid`, tf.`field_value`
-                FROM `".BIT_DB_PREFIX."ticket_attributes` ta
-                    LEFT JOIN `".BIT_DB_PREFIX."ticket_fields tf ON( ta.`field_id` = tf.`field_id` )
-                WHERE ta.`milestone_id` IN ? $whereSql
-				ORDER BY tf.`field_guid`";
+        $query_tickets = "SELECT tmm.*, lc.`title`, lc.`data`
+                FROM `".BIT_DB_PREFIX."ticket_milestone_map` tmm
+                    LEFT JOIN `".BIT_DB_PREFIX."tickets` ts ON( ts.`ticket_id` = tmm.`ticket_id` )
+                    INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
+                WHERE tmm.`milestone_id` = ? $whereSql
+				ORDER BY ts.`ticket_id`";
+
 		$ret = array();
 		$ids = array();
 		while( $res = $result->fetchRow() ) {
