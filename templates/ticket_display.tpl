@@ -18,17 +18,26 @@
 			{tr}Created by{/tr}: {displayname user=$gContent->mInfo.creator_user user_id=$gContent->mInfo.creator_user_id real_name=$gContent->mInfo.creator_real_name}, {tr}Last modification by{/tr}: {displayname user=$gContent->mInfo.modifier_user user_id=$gContent->mInfo.modifier_user_id real_name=$gContent->mInfo.modifier_real_name}, {$gContent->mInfo.last_modified|bit_long_datetime}
 		</div>
 		
-		<div class="details">
-		
-		{foreach from=$gContent->mAttributes item=attr}
-            <div class="row">
-            	<p><b>{tr}{$attr.def_title}{/tr}</b>: {tr}{$attr.field_value}{/tr}</p>
-            </div>  
-		{/foreach}
-		
-		<div class="row">
-        	<p><b>{tr}Title{/tr}</b>: {$gContent->mInfo.title|escape}</p>
-        </div>
+		<div class="ticket">
+	        <ul>
+			{foreach from=$gContent->mAttributes item=attr}
+	            <li>
+	                {formlabel label=$attr.def_title for=""}
+	                {forminput}
+	                    {tr}{$attr.field_value}{/tr}
+	                {/forminput}
+	            </li>
+			{/foreach}
+	        </ul>
+	        
+			<div class="clear"><!-- --></div>
+			
+			<div class="row">
+				{formlabel label="Title" for=""}
+				{forminput}
+	                {$gContent->mInfo.title|escape}
+	            {/forminput}
+	        </div>
 		
 		
 		</div>
