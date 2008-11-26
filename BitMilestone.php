@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.7 2008/11/26 18:22:03 pppspoonman Exp $
-* $Id: BitMilestone.php,v 1.7 2008/11/26 18:22:03 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.8 2008/11/26 18:23:42 pppspoonman Exp $
+* $Id: BitMilestone.php,v 1.8 2008/11/26 18:23:42 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.7 $ $Date: 2008/11/26 18:22:03 $ $Author: pppspoonman $
+* @version $Revision: 1.8 $ $Date: 2008/11/26 18:23:42 $ $Author: pppspoonman $
 * @class BitMilestone
 */
 
@@ -347,7 +347,6 @@ class BitMilestone extends LibertyMime {
 		$ids = array();
 		
 		while( $res = $result->fetchRow() ) {
-			vd("a");
             $ids[] = $res['milestone_id'];
 			$ret[$res['milestone_id']] = $res;
 		}
