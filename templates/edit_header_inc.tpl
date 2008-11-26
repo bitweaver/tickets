@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_header_inc.tpl,v 1.1 2008/11/25 00:15:06 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_header_inc.tpl,v 1.2 2008/11/26 18:22:03 pppspoonman Exp $ *}
 {strip}
     {foreach from=$fieldDefinitions item=fieldDef}
         {if (($gContent->mInfo.ticket_id) || ($fieldDef.use_at_creation == 1)) }
@@ -25,4 +25,15 @@
             >
         {/if}
     {/foreach}
+    <div class="row">
+    	{formlabel label="Milestone" for=""}
+    	{forminput}
+    		<select name="ticket[milestone]">
+    		{foreach from=$milestones item=milestone}
+    			<option value="{$milestone.milestone_id}"
+    			{if ($gContent->mInfo.ticket_id && array_key_exists( $gContent->mInfo.ticket_id, $milestone ) )} selected="selected" {/if}
+    			>{$milestone.title}</option>
+    		{/foreach}
+    	{/forminput}
+    </div>
 {/strip}

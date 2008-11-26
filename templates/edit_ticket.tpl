@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.8 2008/11/25 00:15:06 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.9 2008/11/26 18:22:03 pppspoonman Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -35,7 +35,7 @@
 							{/forminput}
 						</div>
 
-                        {include file="edit_header_inc.tpl" fieldDefinitions=$fieldDefinitions fieldValues=$fieldValues gContent=$gContent}
+                        {include file="edit_header_inc.tpl" fieldDefinitions=$fieldDefinitions fieldValues=$fieldValues milestones=$milestones gContent=$gContent}
 
 						{textarea name="ticket[edit]"}{/textarea}
 

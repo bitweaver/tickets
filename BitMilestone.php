@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.6 2008/11/25 23:56:11 pppspoonman Exp $
-* $Id: BitMilestone.php,v 1.6 2008/11/25 23:56:11 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.7 2008/11/26 18:22:03 pppspoonman Exp $
+* $Id: BitMilestone.php,v 1.7 2008/11/26 18:22:03 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.6 $ $Date: 2008/11/25 23:56:11 $ $Author: pppspoonman $
+* @version $Revision: 1.7 $ $Date: 2008/11/26 18:22:03 $ $Author: pppspoonman $
 * @class BitMilestone
 */
 
@@ -334,33 +334,37 @@ class BitMilestone extends LibertyMime {
 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = tm.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql
 			ORDER BY ".$this->mDb->convertSortmode( $sort_mode );
+			
 		$query_cant = "
 			SELECT COUNT(*)
 			FROM `".BIT_DB_PREFIX."ticket_milestone` tm
 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = tm.`content_id` ) $joinSql
 			WHERE lc.`content_type_guid` = ? $whereSql";
-		$result = $this->mDb->query( $query, $bindVars, $max_records, $offset );
-
-        $query_tickets = "SELECT tmm.*, lc.`title`, lc.`data`
-                FROM `".BIT_DB_PREFIX."ticket_milestone_map` tmm
-                    LEFT JOIN `".BIT_DB_PREFIX."tickets` ts ON( ts.`ticket_id` = tmm.`ticket_id` )
-                    INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = ts.`content_id` ) $joinSql
-                WHERE tmm.`milestone_id` = ? $whereSql
-				ORDER BY ts.`ticket_id`";
-
+			
+		$result = $this->mDb->query( $query, $bindVars/*, $max_records, $offset*/ );
+		
 		$ret = array();
 		$ids = array();
+		
 		while( $res = $result->fetchRow() ) {
+			vd("a");
             $ids[] = $res['milestone_id'];
 			$ret[$res['milestone_id']] = $res;
 		}
-		$pParamHash["cant"] = $this->mDb->getOne( $query_cant, $bindVars );
 		
+		$pParamHash["cant"] = $this->mDb->getOne( $query_cant, $bindVars, $max_records, $offset );
+
 		if ( $pParamHash["cant"] > 0 ) {
-			$result = $this->mDb->query( $query_attr, array( $ids ) );
+			$in = implode(',', array_fill(0, $pParamHash["cant"], '?'));
 			
+        	$query_tickets = "SELECT tmm.*
+                FROM `".BIT_DB_PREFIX."ticket_milestone_map` tmm
+                WHERE tmm.`milestone_id` IN ($in)";
+			
+			$result = $this->mDb->query( $query_tickets, $ids );
+                
 			while( $res = $result->fetchRow() ) 
-				$ret[$res['milestone_id']]['attributes'][$res['field_guid']] = $res;
+				$ret[$res['milestone_id']]['tickets'][] = $res;
 		}
 
 		// add all pagination info to pParamHash

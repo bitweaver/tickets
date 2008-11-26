@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.12 2008/11/25 23:33:56 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.12 2008/11/25 23:33:56 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.13 2008/11/26 18:22:03 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.13 2008/11/26 18:22:03 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.12 $ $Date: 2008/11/25 23:33:56 $ $Author: pppspoonman $
+* @version $Revision: 1.13 $ $Date: 2008/11/26 18:22:03 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -61,7 +61,7 @@ class BitTicket extends LibertyMime {
 		$this->mContentTypeGuid = BITTICKET_CONTENT_TYPE_GUID;
 		$this->registerContentType( BITTICKET_CONTENT_TYPE_GUID, array(
 			'content_type_guid'   => BITTICKET_CONTENT_TYPE_GUID,
-			'content_description' => 'Tickets package provide a simple system of tracking tasks, requests or bugs.',
+			'content_description' => 'Ticket',
 			'handler_class'       => 'BitTicket',
 			'handler_package'     => 'tickets',
 			'handler_file'        => 'BitTicket.php',
@@ -147,22 +147,23 @@ class BitTicket extends LibertyMime {
 		if( $this->verify( $pParamHash )&& LibertyMime::store( $pParamHash ) ) {
 			$table = BIT_DB_PREFIX."tickets";
             $attrTable = BIT_DB_PREFIX."ticket_attributes";
+            $milestoneTable = BIT_DB_PREFIX."ticket_milestone_map";
             
 
 			if( $this->mTicketId ) {
 				$locId = array( "ticket_id" => $pParamHash['ticket_id'] );
 				$result = $this->mDb->associateUpdate( $table, $pParamHash['ticket_store'], $locId );
 
-                foreach( $pParamHash['ticket_store']['attributes'] as $attr) {
+                foreach( $pParamHash['attributes_store'] as $attr) {
                     // if attributes has changed update row and store one in history
-                    if ( !( array_has_key( $this->mAttributes, $attr['field_guid'] ) ) ) {
-                        $locId ['field_id'] = $attr['field_id'];
-                        $result = $this->mDB->associateInsert( $attrTable, array( 'ticket_id' => $this->mTicketId, $attr ) );
-                    }
-                    else if ( $this->mAttributes[$attr['field_guid']]['field_value'] != $attr['field_value'] ) {
-                        $locId ['field_id'] = $attr['field_id'];
-                        $result = $this->mDB->associateUpdate( $attrTable, array( 'ticket_id' => $this->mTicketId, $attr ) );
-                    }
+//                    if ( !( array_has_key( $this->mAttributes, $attr['field_guid'] ) ) ) {
+//                        $locId ['field_id'] = $attr['field_id'];
+//                        $result = $this->mDB->associateInsert( $attrTable, array( 'ticket_id' => $this->mTicketId, $attr ) );
+//                    }
+//                    else if ( $this->mAttributes[$attr['field_guid']]['field_value'] != $attr['field_value'] ) {
+//                        $locId ['field_id'] = $attr['field_id'];
+//                        $result = $this->mDB->associateUpdate( $attrTable, array( 'ticket_id' => $this->mTicketId, $attr ) );
+//                    }
                 }
 
 
@@ -180,6 +181,13 @@ class BitTicket extends LibertyMime {
                 foreach( $pParamHash['attributes_store'] as $attr) {
                     $result = $this->mDb->associateInsert( $attrTable, array( 'ticket_id' => $this->mTicketId, 'field_id' => $attr ) );
                 }
+			}
+			
+			if( isset( $pParamHash['milestone_id'] ) ) {
+				$deleteQuery = "DELETE FROM $milestoneTable WHERE `ticket_id`=?";
+				$result = $this->mDb->query( $deleteQuery, $this->mTicketId );
+				
+				$result = $this->mDb->associateInsert( $milestoneTable, array( "ticket_id" => $this->mTicketId, "milestone_id" => $pParamHash['milestone_id'] ) );
 			}
 
 
@@ -240,6 +248,12 @@ class BitTicket extends LibertyMime {
 			$pParamHash['attributes_store'] = $pParamHash['attributes'];
 			unset( $pParamHash['attributes'] );
 		}
+		
+		if( !empty( $pParamHash['milestone'] ) ) {
+			$pParamHash['milestone_id'] = $pParamHash['milestone'];
+			unset( $pParamHash['milestone'] );
+		}
+		
 
 		return( count( $this->mErrors )== 0 );
 	}
@@ -312,6 +326,11 @@ class BitTicket extends LibertyMime {
 		}
 
         if( is_array( $idList ) ) {
+        	
+        	//If there is identifiers list, but no element in it, just return empty array.
+        	if (count ($idList) == 0 )
+        		return array();
+        		
 			$whereSql .= " AND ts.`ticket_id` IN( ".implode( ',',array_fill( 0,count( $idList ),'?' ) )." )";
 			$bindVars = array_merge ( $bindVars, $idList );
         }

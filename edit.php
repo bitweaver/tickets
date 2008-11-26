@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/edit.php,v 1.4 2008/11/23 22:34:15 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/edit.php,v 1.5 2008/11/26 18:22:03 pppspoonman Exp $
 // Copyright (c) 2004 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -11,6 +11,7 @@ require_once( '../bit_setup_inc.php' );
 $gBitSystem->verifyPackage( 'tickets' );
 
 require_once( TICKETS_PKG_PATH.'lookup_tickets_inc.php' );
+require_once( TICKETS_PKG_PATH.'BitMilestone.php' );
 
 // Now check permissions to access this page
 if( $gContent->isValid() ){
@@ -54,10 +55,16 @@ if( !empty( $_REQUEST["save_ticket"] ) ) {
 	}
 }
 
+// Get necessary lists.
 $fieldDefinitions = BitTicket::getFieldDefinitions();
 $gBitSmarty->assign( 'fieldDefinitions', $fieldDefinitions);
 $fieldValues = BitTicket::getFieldValues();
 $gBitSmarty->assign( 'fieldValues', $fieldValues);
+
+$milestone = new BitMilestone();
+$pParamHash = array();
+$milestones = $milestone->getList( $pParamHash );
+$gBitSmarty->assign( 'milestones', $milestones);
 
 
 // Display the template

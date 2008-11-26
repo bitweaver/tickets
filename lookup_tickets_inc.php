@@ -13,8 +13,8 @@ if( empty( $gContent ) || !is_object( $gContent ) || !$gContent->isValid() ) {
 	} elseif( @BitBase::verifyId( $_REQUEST['content_id'] ) ) {
 		$gContent = new BitTicket( NULL, $_REQUEST['content_id'] );
 
-	} elseif (@BitBase::verifyId( $_REQUEST['tickets']['ticket_id'] ) ) {
-		$gContent = new BitTicket( $_REQUEST['tickets']['ticket_id'] );
+	} elseif (@BitBase::verifyId( $_REQUEST['ticket']['ticket_id'] ) ) {
+		$gContent = new BitTicket( $_REQUEST['ticket']['ticket_id'] );
 
 	// otherwise create new object
 	} else {
