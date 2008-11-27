@@ -18,33 +18,49 @@
 			{tr}Created by{/tr}: {displayname user=$gContent->mInfo.creator_user user_id=$gContent->mInfo.creator_user_id real_name=$gContent->mInfo.creator_real_name}, {tr}Last modification by{/tr}: {displayname user=$gContent->mInfo.modifier_user user_id=$gContent->mInfo.modifier_user_id real_name=$gContent->mInfo.modifier_real_name}, {$gContent->mInfo.last_modified|bit_long_datetime}
 		</div>
 		
-		<div class="ticket">
+		<div class="display ticket">
 	        <ul>
 			{foreach from=$gContent->mAttributes item=attr}
 	            <li>
-	                {formlabel label=$attr.def_title for=""}
+	                {formlabel label=$attr.def_title for="ticket_$attr.def_title"}
 	                {forminput}
+	                	<span id="{$attr.def_title}">
 	                    {tr}{$attr.field_value}{/tr}
+	                    </span>
 	                {/forminput}
 	            </li>
 			{/foreach}
+	
+			<li>		
+				{formlabel label="Title" for="ticket_title"}
+				{forminput}
+					<span id="ticket_title">
+	                {$gContent->mInfo.title|escape}
+	                </span>
+	            {/forminput}
+	        </li>
+	        
+	        <li>		
+				{formlabel label="Milestone" for="ticket_milestone"}
+				{forminput}
+					<span id="ticket_milestone">
+	                	{$gContent->mMilestones[0].title}
+	                </span>
+	            {/forminput}
+	        </li>
+	        
+                
+	            
+	        
 	        </ul>
 	        
-			<div class="clear"><!-- --></div>
-			
-			<div class="row">
-				{formlabel label="Title" for=""}
-				{forminput}
-	                {$gContent->mInfo.title|escape}
-	            {/forminput}
-	        </div>
-		
-		
 		</div>
 	</div><!-- end .header -->
 
 	<div class="body">
 		<div class="content">
+
+			
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$gContent->mInfo}
 			{$gContent->mInfo.parsed_data}
 			{if !$preview}

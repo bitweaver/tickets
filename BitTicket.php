@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.13 2008/11/26 18:22:03 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.13 2008/11/26 18:22:03 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.14 2008/11/27 22:53:57 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.14 2008/11/27 22:53:57 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.13 $ $Date: 2008/11/26 18:22:03 $ $Author: pppspoonman $
+* @version $Revision: 1.14 $ $Date: 2008/11/27 22:53:57 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -43,6 +43,13 @@ class BitTicket extends LibertyMime {
      * @access public
      */
     var $mAttributes;
+    
+    /**
+     * Milestones.
+     * @var array
+     * @access public
+     */
+    var $mMilestones;
 
 	/**
 	 * BitTicket During initialisation, be sure to call our base constructors
@@ -106,6 +113,12 @@ class BitTicket extends LibertyMime {
                     LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values tf ON( ta.`field_id` = tf.`field_id` )
 					LEFT JOIN `".BIT_DB_PREFIX."ticket_field_defs td ON( tf.`def_id` = td.`def_id` )
                 WHERE ta.`ticket_id`=?";
+                
+            $milestone = "SELECT tm.*, lc.`title`
+				FROM `".BIT_DB_PREFIX."ticket_milestone_map` tmm
+					LEFT JOIN `".BIT_DB_PREFIX."ticket_milestone` tm ON (tm.`milestone_id` = tmm.`milestone_id`)
+					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( tm.`content_id` = lc.`content_id` ) $joinSql
+				WHERE tmm.`ticket_id` = ?";
 
 			$result = $this->mDb->query( $query, $bindVars );
 
@@ -124,6 +137,12 @@ class BitTicket extends LibertyMime {
                 
                 while ( $row = $attrResult->fetchRow() ) {
                     $this->mAttributes[$row["def_id"]] = $row;
+                }
+                
+                $milestoneResult = $this->mDb->query( $milestone, array ( $this->mTicketId ) );
+                
+                while ( $row = $milestoneResult->fetchRow() ) {
+                    $this->mMilestones[] = $row;
                 }
 
 				LibertyMime::load();
@@ -373,6 +392,8 @@ class BitTicket extends LibertyMime {
 			
 			while( $res = $result->fetchRow() ) 
 				$ret[$res['ticket_id']]['attributes'][$res['def_id']] = $res;
+				
+			
 		}
 		
 		// add all pagination info to pParamHash
