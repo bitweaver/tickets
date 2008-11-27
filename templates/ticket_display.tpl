@@ -47,6 +47,9 @@
 		<div class="content">
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$gContent->mInfo}
 			{$gContent->mInfo.parsed_data}
+			{if !$preview}
+				{include file="bitpackage:liberty/comments.tpl"}
+			{/if}
 		</div><!-- end .content -->
 	</div><!-- end .body -->
 </div><!-- end .tickets -->
