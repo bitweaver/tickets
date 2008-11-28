@@ -20,7 +20,11 @@
 		
 		<div class="body">
 			<div class="row">
-				{tr}From{/tr} {$gContent->mDateFrom} {tr}to{/tr} {$gContent->mDateTo}
+				{tr}From{/tr} {$gContent->mDateFrom|bit_long_datetime} {tr}to{/tr} {$gContent->mDateTo|bit_long_datetime}
+                {tr}Duration{/tr}: 3 days
+                {tr}Time left{/tr}: 1 day
+                {tr}Tickets finished{/tr} : 33 of 45
+                {tr}Percentage{/tr} 80%
 			</div>
 			
 			<div class="content">

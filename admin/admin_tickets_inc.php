@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/admin/admin_tickets_inc.php,v 1.5 2008/11/25 00:24:27 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/admin/admin_tickets_inc.php,v 1.6 2008/11/28 23:16:00 pppspoonman Exp $
 // Copyright (c) 2005 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -33,7 +33,7 @@ $processForm = set_tab();
 if( $processForm ) {
 	$ticketsToggles = array_merge( $formTicketsLists );
 	foreach( $ticketsToggles as $item => $data ) {
-		simple_set_toggle( $item, 'ticketss' );
+		simple_set_toggle( $item, 'tickets' );
 	}
 
 }
@@ -43,6 +43,9 @@ $tickets = $ticket->getList( $_REQUEST );
 
 $fieldDefinitions = BitTicket::getFieldDefinitions ();
 $gBitSmarty->assign_by_ref( 'fieldDefinitions', $fieldDefinitions );
+
+$fieldValues = BitTicket::getFieldValues ();
+$gBitSmarty->assign_by_ref( 'fieldValues', $fieldValues);
 
 $gBitSmarty->assign_by_ref('tickets', $tickets['data']);
 ?>
