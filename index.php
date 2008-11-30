@@ -1,11 +1,13 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/index.php,v 1.6 2008/11/30 18:44:35 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/index.php,v 1.7 2008/11/30 19:42:55 pppspoonman Exp $
 // Copyright (c) 2004 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
 
 // Initialization
 require_once( '../bit_setup_inc.php' );
+
+require_once( TICKETS_PKG_PATH.'BitMilestone.php');
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'tickets' );
@@ -39,6 +41,17 @@ if( is_object( $gContent ) && $gContent->isCommentable() ) {
 	$gBitSmarty->assign( 'item_display_comments', TRUE );
 	include_once( LIBERTY_PKG_PATH.'comments_inc.php' );
 }
+
+// Get necessary lists.
+$fieldDefinitions = BitTicket::getFieldDefinitions();
+$gBitSmarty->assign( 'fieldDefinitions', $fieldDefinitions);
+$fieldValues = BitTicket::getFieldValues();
+$gBitSmarty->assign( 'fieldValues', $fieldValues);
+
+$milestone = new BitMilestone();
+$pParamHash = array();
+$milestones = $milestone->getList( $pParamHash );
+$gBitSmarty->assign( 'milestones', $milestones);
 
 // Display the template
 $gBitSystem->display( 'bitpackage:tickets/ticket_display.tpl', tra( 'Tickets' ) , array( 'display_mode' => 'display' ));

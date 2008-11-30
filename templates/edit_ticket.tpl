@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.9 2008/11/26 18:22:03 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.10 2008/11/30 19:42:55 pppspoonman Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -26,16 +26,21 @@
 				{jstab}
 					{legend legend="Edit/Create Tickets Record"}
 						<input type="hidden" name="ticket[ticket_id]" value="{$gContent->mInfo.ticket_id}" />
-						
-						<div class="row">
+
+						<div class="display ticket">
+							<ul>
+	                        	{include file="edit_header_inc.tpl" fieldDefinitions=$fieldDefinitions fieldValues=$fieldValues milestones=$milestones gContent=$gContent}
+                        	</ul>
+                        	<div class="clear"></div>
+                        </div>
+                        
+                        <div class="row">
 							{formlabel label="Title" for="title"}
 							{forminput}
 								<input type="text" size="60" maxlength="200" name="ticket[title]" id="title" value="{$gContent->mInfo.title|escape}" />
 								{formhelp note="Brief and meaningful summary of a ticket."}
 							{/forminput}
 						</div>
-
-                        {include file="edit_header_inc.tpl" fieldDefinitions=$fieldDefinitions fieldValues=$fieldValues milestones=$milestones gContent=$gContent}
 
 						{textarea name="ticket[edit]"}{/textarea}
 

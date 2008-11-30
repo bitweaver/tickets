@@ -19,37 +19,23 @@
 		</div>
 		
 		<div class="display ticket">
+			
 	        <ul>
-			{foreach from=$gContent->mAttributes item=attr}
-	            <li>
-	                {formlabel label=$attr.def_title for="ticket_$attr.def_title"}
-	                {forminput}
-	                	<span id="{$attr.def_title}">
-	                    {tr}{$attr.field_value}{/tr}
-	                    </span>
-	                {/forminput}
-	            </li>
-			{/foreach}
-	
-			<li>		
-				{formlabel label="Title" for="ticket_title"}
-				{forminput}
-					<span id="ticket_title">
-	                {$gContent->mInfo.title|escape}
-	                </span>
-	            {/forminput}
-	        </li>
+	        {include file="edit_header_inc.tpl" fieldDefinitions=$fieldDefinitions fieldValues=$fieldValues milestones=$milestones gContent=$gContent}
 	        
-	        <li>		
-				{formlabel label="Milestone" for="ticket_milestone"}
-				{forminput}
-					<span id="ticket_milestone">
-	                	{$gContent->mMilestones[0].title}
-	                </span>
-	            {/forminput}
-	        </li>
+		        <li>		
+					{formlabel label="Milestone" for="ticket_milestone"}
+					{forminput}
+						<span id="ticket_milestone">
+		                	{$gContent->mMilestones[0].title}
+		                </span>
+		            {/forminput}
+		        </li>
 	        
 	        </ul>
+	        
+	        {* small trick so if ul is all float it widens up to this point *}
+	        <div class="clear"></div>
 	        
 		</div>
 	</div><!-- end .header -->
@@ -58,6 +44,9 @@
 		<div class="content">
 			
 			{include file="bitpackage:liberty/services_inc.tpl" serviceLocation='body' serviceHash=$gContent->mInfo}
+			
+			<h3 style="clear:both">{$gContent->mInfo.title|escape}</h3>
+			
 			{$gContent->mInfo.parsed_data}
 			{if !$preview}
 				{include file="bitpackage:tickets/ticket_comments.tpl"}
