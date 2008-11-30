@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.8 2008/11/26 18:23:42 pppspoonman Exp $
-* $Id: BitMilestone.php,v 1.8 2008/11/26 18:23:42 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.9 2008/11/30 23:11:55 pppspoonman Exp $
+* $Id: BitMilestone.php,v 1.9 2008/11/30 23:11:55 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.8 $ $Date: 2008/11/26 18:23:42 $ $Author: pppspoonman $
+* @version $Revision: 1.9 $ $Date: 2008/11/30 23:11:55 $ $Author: pppspoonman $
 * @class BitMilestone
 */
 
@@ -109,9 +109,9 @@ class BitMilestone extends LibertyMime {
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
 				WHERE tm.`$lookupColumn`=? $whereSql";
 
-            $ticketQuery = "SELECT tmm.ticket_id
-                FROM `".BIT_DB_PREFIX."ticket_milestone_map` tmm 
-                WHERE tmm.`milestone_id`=?";
+            $ticketQuery = "SELECT t.ticket_id
+                FROM `".BIT_DB_PREFIX."tickets` t 
+                WHERE t.`milestone_id`=?";
 
 			$result = $this->mDb->query( $query, $bindVars );
 
@@ -347,24 +347,22 @@ class BitMilestone extends LibertyMime {
 		$ids = array();
 		
 		while( $res = $result->fetchRow() ) {
-            $ids[] = $res['milestone_id'];
 			$ret[$res['milestone_id']] = $res;
 		}
 		
 		$pParamHash["cant"] = $this->mDb->getOne( $query_cant, $bindVars, $max_records, $offset );
 
-		if ( $pParamHash["cant"] > 0 ) {
-			$in = implode(',', array_fill(0, $pParamHash["cant"], '?'));
+		/*if ( $pParamHash["cant"] > 0 ) {
 			
-        	$query_tickets = "SELECT tmm.*
-                FROM `".BIT_DB_PREFIX."ticket_milestone_map` tmm
-                WHERE tmm.`milestone_id` IN ($in)";
+        	$query_tickets = "SELECT t.`ticket_id`
+                FROM `".BIT_DB_PREFIX."tickets` t
+                WHERE t.`milestone_id`=?";
 			
 			$result = $this->mDb->query( $query_tickets, $ids );
                 
 			while( $res = $result->fetchRow() ) 
 				$ret[$res['milestone_id']]['tickets'][] = $res;
-		}
+		}*/
 
 		// add all pagination info to pParamHash
 		LibertyContent::postGetList( $pParamHash );

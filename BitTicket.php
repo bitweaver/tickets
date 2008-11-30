@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.15 2008/11/30 18:44:35 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.15 2008/11/30 18:44:35 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.16 2008/11/30 23:11:55 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.16 2008/11/30 23:11:55 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.15 $ $Date: 2008/11/30 18:44:35 $ $Author: pppspoonman $
+* @version $Revision: 1.16 $ $Date: 2008/11/30 23:11:55 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -45,11 +45,11 @@ class BitTicket extends LibertyMime {
     var $mAttributes;
     
     /**
-     * Milestones.
+     * Milestone.
      * @var array
      * @access public
      */
-    var $mMilestones;
+    var $mMilestone;
 
 	/**
 	 * BitTicket During initialisation, be sure to call our base constructors
@@ -98,15 +98,17 @@ class BitTicket extends LibertyMime {
 			$this->getServicesSql( 'content_load_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
 
 			$query = "
-				SELECT s.*, lc.*,
+				SELECT t.*, lc.*,
 				uue.`login` AS modifier_user, uue.`real_name` AS modifier_real_name,
-				uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name
+				uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name,
+				lcm.`title` AS milestone_title
 				$selectSql
-				FROM `".BIT_DB_PREFIX."tickets` s
-					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = s.`content_id` ) $joinSql
+				FROM `".BIT_DB_PREFIX."tickets` t
+					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( lc.`content_id` = t.`content_id` ) $joinSql
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON( uue.`user_id` = lc.`modifier_user_id` )
 					LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( uuc.`user_id` = lc.`user_id` )
-				WHERE s.`$lookupColumn`=? $whereSql";
+					LEFT JOIN `".BIT_DB_PREFIX."liberty_content` lcm ON( lc.`content_id` = t.`milestone_id` )
+				WHERE t.`$lookupColumn`=? $whereSql";
 
             $attrQuery = "SELECT ta.*, tf.`def_id`, tf.`field_id`, tf.`field_value`, td.`title` AS `def_title`
                 FROM `".BIT_DB_PREFIX."ticket_attributes` ta
@@ -114,18 +116,15 @@ class BitTicket extends LibertyMime {
 					LEFT JOIN `".BIT_DB_PREFIX."ticket_field_defs td ON( tf.`def_id` = td.`def_id` )
                 WHERE ta.`ticket_id`=?";
                 
-            $milestone = "SELECT tm.*, lc.`title`
-				FROM `".BIT_DB_PREFIX."ticket_milestone_map` tmm
-					LEFT JOIN `".BIT_DB_PREFIX."ticket_milestone` tm ON (tm.`milestone_id` = tmm.`milestone_id`)
-					INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON( tm.`content_id` = lc.`content_id` ) $joinSql
-				WHERE tmm.`ticket_id` = ?";
-
 			$result = $this->mDb->query( $query, $bindVars );
 
 			if( $result && $result->numRows() ) {
 				$this->mInfo = $result->fields;
 				$this->mContentId = $result->fields['content_id'];
 				$this->mTicketId = $result->fields['ticket_id'];
+				
+				$this->mMilestone['milestone_id'] = $result->fields['milestone_id'];
+				$this->mMilestone['title'] = $result->fields['milestone_title'];
 
 				$this->mInfo['creator'] = ( !empty( $result->fields['creator_real_name'] ) ? $result->fields['creator_real_name'] : $result->fields['creator_user'] );
 				$this->mInfo['editor'] = ( !empty( $result->fields['modifier_real_name'] ) ? $result->fields['modifier_real_name'] : $result->fields['modifier_user'] );
@@ -139,12 +138,6 @@ class BitTicket extends LibertyMime {
                     $this->mAttributes[$row["def_id"]] = $row;
                 }
                 
-                $milestoneResult = $this->mDb->query( $milestone, array ( $this->mTicketId ) );
-                
-                while ( $row = $milestoneResult->fetchRow() ) {
-                    $this->mMilestones[] = $row;
-                }
-
 				LibertyMime::load();
 			}
 		}
@@ -209,14 +202,6 @@ class BitTicket extends LibertyMime {
                     $result = $this->mDb->associateInsert( $attrTable, array( 'ticket_id' => $this->mTicketId, 'field_id' => $attr ) );
                 }
 			}
-			
-			if( isset( $pParamHash['milestone_id'] ) ) {
-				$deleteQuery = "DELETE FROM $milestoneTable WHERE `ticket_id`=?";
-				$result = $this->mDb->query( $deleteQuery, $this->mTicketId );
-				
-				$result = $this->mDb->associateInsert( $milestoneTable, array( "ticket_id" => $this->mTicketId, "milestone_id" => $pParamHash['milestone_id'] ) );
-			}
-
 
 			$this->mDb->CompleteTrans();
 			$this->load();
@@ -277,7 +262,7 @@ class BitTicket extends LibertyMime {
 		}
 		
 		if( !empty( $pParamHash['milestone'] ) ) {
-			$pParamHash['milestone_id'] = $pParamHash['milestone'];
+			$pParamHash['ticket_store']['milestone_id'] = $pParamHash['milestone'];
 			unset( $pParamHash['milestone'] );
 		}
 		
