@@ -12,7 +12,7 @@
 			{foreach name=comments_loop key=key item=item from=$comments}
 				{displaycomment comment="$item"}
 			{/foreach}		
-		<div id="comment_{$gContent->mContentId}_footer"></div>
+		
 		
 		{if $comments_ajax && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
 			<div class="row submit">
@@ -21,6 +21,7 @@
 		{/if}
 		
 		<div id="comment_{$gContent->mContentId}"></div>
+		<div id="comment_{$gContent->mContentId}_footer"></div>
 		
 		<div id="edit_comments" {if $comments_ajax}style="display:none"{/if}>
 			{include file="bitpackage:liberty/comments_post_inc.tpl" post_title="Post Comment"}
