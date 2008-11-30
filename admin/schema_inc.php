@@ -1,12 +1,24 @@
 <?php
 $tables = array(
 
+    'ticket_milestone' => "
+        milestone_id I4 PRIMARY,
+        content_id I4,
+        date_from I8 NOT NULL,
+        date_to I8 NOT NULL,
+		is_default I1
+        CONSTRAINT '
+    		, CONSTRAINT `ticket_milestone_fkey` FOREIGN KEY( `content_id` ) REFERENCES `".BIT_DB_PREFIX."liberty_content` ( `content_id` )'
+    ",
+
     'tickets' => "
         ticket_id I4 AUTO PRIMARY,
         content_id I4,
-        assignee_id I4
+        assignee_id I4,
+		milestone_id I4
         CONSTRAINT '
     		, CONSTRAINT `tickets_content_fkey` FOREIGN KEY( `content_id` ) REFERENCES `".BIT_DB_PREFIX."liberty_content` ( `content_id` )
+			, CONSTRAINT `tickets_mlstone_fkey` FOREIGN KEY( `milestone_id` ) REFERENCES `".BIT_DB_PREFIX."ticket_milestone` ( `milestone_id` )
         '
     ",
 
@@ -25,7 +37,7 @@ $tables = array(
         field_value C(100),
         sort_order I4,
         is_default I1,
-        is_deleted I1
+        is_enabled I1 DEFAULT(1)
         CONSTRAINT '
             , CONSTRAINT `ticket_fval_fkey` FOREIGN KEY( `def_id` ) REFERENCES `".BIT_DB_PREFIX."ticket_field_defs` ( `def_id` )
         '
@@ -65,19 +77,7 @@ $tables = array(
             , CONSTRAINT `ticketqmap_field_fkey` FOREIGN KEY( `def_id` ) REFERENCES `".BIT_DB_PREFIX."ticket_field_defs` ( `def_id` )'
     ",
 
-    'ticket_milestone' => "
-        milestone_id I4 PRIMARY,
-        content_id I4,
-        date_from I8 NOT NULL,
-        date_to I8 NOT NULL
-        CONSTRAINT '
-    		, CONSTRAINT `ticket_milestone_fkey` FOREIGN KEY( `content_id` ) REFERENCES `".BIT_DB_PREFIX."liberty_content` ( `content_id` )'
-    ",
 
-    'ticket_milestone_map' => "
-        ticket_id I4,
-        milestone_id I4
-    "
 ); 
 
 global $gBitInstaller;
