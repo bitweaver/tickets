@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.14 2008/11/27 22:53:57 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.14 2008/11/27 22:53:57 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.15 2008/11/30 18:44:35 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.15 2008/11/30 18:44:35 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.14 $ $Date: 2008/11/27 22:53:57 $ $Author: pppspoonman $
+* @version $Revision: 1.15 $ $Date: 2008/11/30 18:44:35 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -149,6 +149,14 @@ class BitTicket extends LibertyMime {
 			}
 		}
 		return( count( $this->mInfo ) );
+	}
+
+	/**
+	 * Check if the current post can have comments attached to it
+	 */
+	function isCommentable(){
+		global $gBitSystem;	
+		return $gBitSystem->isFeatureActive( 'blog_posts_comments' );
 	}
 
 	/**

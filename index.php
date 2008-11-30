@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/index.php,v 1.5 2008/11/27 22:00:24 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/index.php,v 1.6 2008/11/30 18:44:35 pppspoonman Exp $
 // Copyright (c) 2004 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -29,12 +29,13 @@ $gContent->verifyViewPermission();
 // Add a hit to the counter
 $gContent->addHit();
 
-if( is_object( $gContent ) /*&& $gContent->isCommentable()*/ ) {
+if( is_object( $gContent ) && $gContent->isCommentable() ) {
 	$commentsParentId = $gContent->mContentId;
 	$comments_vars = Array( BITTICKET_CONTENT_TYPE_GUID );
 	$comments_prefix_var = BITTICKET_CONTENT_TYPE_GUID.':';
 	$comments_object_var = BITTICKET_CONTENT_TYPE_GUID;
 	$comments_return_url = $gContent->getDisplayUrl();
+	$comments_sort_mode = "commentDate_asc";
 	$gBitSmarty->assign( 'item_display_comments', TRUE );
 	include_once( LIBERTY_PKG_PATH.'comments_inc.php' );
 }
