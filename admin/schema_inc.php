@@ -105,7 +105,7 @@ $sequences = array (
 $gBitInstaller->registerSchemaSequences( TICKETS_PKG_NAME, $sequences );
 
 $insertTicketFieldDefs   = "INSERT INTO `".BIT_DB_PREFIX."ticket_field_defs` (`title`, `description, `sort_order`, `use_at_creation`, `is_enabled`)";
-$insertTicketFieldValues = "INSERT INTO `".BIT_DB_PREFIX."ticket_field_values` (`def_id`, `field_value`, `sort_order`, `is_default`, `is_deleted`)";
+$insertTicketFieldValues = "INSERT INTO `".BIT_DB_PREFIX."ticket_field_values` (`def_id`, `field_value`, `sort_order`, `is_default`, `is_enabled`)";
 
 $gBitInstaller->registerSchemaDefault( TICKETS_PKG_NAME, array(
 
@@ -116,28 +116,28 @@ $gBitInstaller->registerSchemaDefault( TICKETS_PKG_NAME, array(
           "$insertTicketFieldDefs VALUES ('Component', 'Part of system that ticket affects', 5, 1, 1)",
           "$insertTicketFieldDefs VALUES ('Version', 'Release version that ticket is from', 6, 1, 1)",
     
-	      "$insertTicketFieldValues VALUES (1, 'Bug', 1, 1, 0)",
-	      "$insertTicketFieldValues VALUES (1, 'Feature Request', 2, 0, 0)",
-	      "$insertTicketFieldValues VALUES (1, 'Task', 3, 0, 0)",
+	      "$insertTicketFieldValues VALUES (1, 'Bug', 1, 1, 1)",
+	      "$insertTicketFieldValues VALUES (1, 'Feature Request', 2, 0, 1)",
+	      "$insertTicketFieldValues VALUES (1, 'Task', 3, 0, 1)",
 
-	      "$insertTicketFieldValues VALUES (2, 'Trivial', 1, 0, 0)",
-	      "$insertTicketFieldValues VALUES (2, 'Minor', 2, 0, 0)",
-	      "$insertTicketFieldValues VALUES (2, 'Normal', 3, 1, 0)",
-	      "$insertTicketFieldValues VALUES (2, 'Major', 4, 0, 0)",
-	      "$insertTicketFieldValues VALUES (2, 'Critical', 5, 0, 0)",
-	      "$insertTicketFieldValues VALUES (2, 'Blocker', 6, 0, 0)",
+	      "$insertTicketFieldValues VALUES (2, 'Trivial', 1, 0, 1)",
+	      "$insertTicketFieldValues VALUES (2, 'Minor', 2, 0, 1)",
+	      "$insertTicketFieldValues VALUES (2, 'Normal', 3, 1, 1)",
+	      "$insertTicketFieldValues VALUES (2, 'Major', 4, 0, 1)",
+	      "$insertTicketFieldValues VALUES (2, 'Critical', 5, 0, 1)",
+	      "$insertTicketFieldValues VALUES (2, 'Blocker', 6, 0, 1)",
 
-	      "$insertTicketFieldValues VALUES (3, 'New', 1, 1, 0)",
-	      "$insertTicketFieldValues VALUES (3, 'Assigned', 2, 0, 0)",
-	      "$insertTicketFieldValues VALUES (3, 'Reopened', 3, 0, 0)",
-	      "$insertTicketFieldValues VALUES (3, 'Closed', 4, 0, 0)",
+	      "$insertTicketFieldValues VALUES (3, 'New', 1, 1, 1)",
+	      "$insertTicketFieldValues VALUES (3, 'Assigned', 2, 0, 1)",
+	      "$insertTicketFieldValues VALUES (3, 'Reopened', 3, 0, 1)",
+	      "$insertTicketFieldValues VALUES (3, 'Closed', 4, 0, 1)",
 
-	      "$insertTicketFieldValues VALUES (4, 'None', 1, 1, 0)",
-	      "$insertTicketFieldValues VALUES (4, 'Fixed', 2, 0, 0)",
-	      "$insertTicketFieldValues VALUES (4, 'Invalid', 3, 0, 0)",
-	      "$insertTicketFieldValues VALUES (4, 'Duplicate', 4, 0, 0)",
-	      "$insertTicketFieldValues VALUES (4, 'Works For Me', 5, 0, 0)",
-	      "$insertTicketFieldValues VALUES (4, 'Wont Fix', 6, 0, 0)",
+	      "$insertTicketFieldValues VALUES (4, 'None', 1, 1, 1)",
+	      "$insertTicketFieldValues VALUES (4, 'Fixed', 2, 0, 1)",
+	      "$insertTicketFieldValues VALUES (4, 'Invalid', 3, 0, 1)",
+	      "$insertTicketFieldValues VALUES (4, 'Duplicate', 4, 0, 1)",
+	      "$insertTicketFieldValues VALUES (4, 'Works For Me', 5, 0, 1)",
+	      "$insertTicketFieldValues VALUES (4, 'Wont Fix', 6, 0, 1)",
 
 ) );
 
