@@ -113,8 +113,8 @@ $gBitInstaller->registerSchemaDefault( TICKETS_PKG_NAME, array(
           "$insertTicketFieldDefs VALUES ('Priority', 'Importance of a ticket', 2, 1, 1)",
           "$insertTicketFieldDefs VALUES ('Status', 'Current work Status of a ticket', 3, 0, 1)",
           "$insertTicketFieldDefs VALUES ('Resolution', 'How ticket is resolved for now', 4, 0, 1)",
-          "$insertTicketFieldDefs VALUES ('Component', 'Part of system that ticket affects', 4, 1, 1)",
-          "$insertTicketFieldDefs VALUES ('Version', 'Release version that ticket is from', 5, 1, 1)",
+          "$insertTicketFieldDefs VALUES ('Component', 'Part of system that ticket affects', 5, 1, 1)",
+          "$insertTicketFieldDefs VALUES ('Version', 'Release version that ticket is from', 6, 1, 1)",
     
 	      "$insertTicketFieldValues VALUES (1, 'Bug', 1, 1, 0)",
 	      "$insertTicketFieldValues VALUES (1, 'Feature Request', 2, 0, 0)",
