@@ -19,13 +19,23 @@
 		</div>
 		
 		<div class="display ticket">
+		
+			{form action="`$comments_return_url`#editheader" id="editheader-form"}
+			{formfeedback hash=$formfeedback}
+			<div class="clear" id="editheader-feedback"></div>
 			
 	        <ul>
 		        {include file="edit_header_inc.tpl" fieldDefinitions=$fieldDefinitions fieldValues=$fieldValues milestones=$milestones gContent=$gContent}
 	        </ul>
 	        
 	        {* small trick so if ul is all float it widens up to this point *}
-	        <div class="clear"></div>
+	        <div class="clear" id="asd"></div>
+	        
+			<div class="row submit">
+				<input type="submit" name="post_header_request" value="{tr}Submit header changes{/tr}" onclick="BitTicket.postHeader();return false;"/>
+			</div>
+			
+			{/form}
 	        
 		</div>
 	</div><!-- end .header -->

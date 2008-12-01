@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/index.php,v 1.7 2008/11/30 19:42:55 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/index.php,v 1.8 2008/12/01 22:57:19 pppspoonman Exp $
 // Copyright (c) 2004 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -52,6 +52,8 @@ $milestone = new BitMilestone();
 $pParamHash = array();
 $milestones = $milestone->getList( $pParamHash );
 $gBitSmarty->assign( 'milestones', $milestones);
+
+$gBitThemes->loadJavascript( TICKETS_PKG_PATH.'scripts/BitTicket.js', TRUE );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:tickets/ticket_display.tpl', tra( 'Tickets' ) , array( 'display_mode' => 'display' ));
