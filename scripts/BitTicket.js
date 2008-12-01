@@ -21,17 +21,14 @@ BitTicket = {
 	},
 	'checkRslt': function(rslt){
 		var xml = rslt.responseXML;
-		var status = xml.documentElement.getElementsByTagName('code')[0].firstChild.nodeValue;
-		if (status == '200'){
-			BitTicket.displayHeader(rslt);
-		}else{
-			//if status is 400, 401, or 405 still call preview - allowing someone to save their typed text.
-			LibertyComment.displayPreview(rslt);
-		}
+		
+		//display feedback regardless of status
+		BitTicket.displayHeader(rslt);
 	},
 	'displayHeader': function(rslt){
 		var xml = rslt.responseXML;
 		$(BitTicket.FEEDBACK_DIV_ID).innerHTML = xml.documentElement.getElementsByTagName('content')[0].firstChild.nodeValue;
+		Fat.fade_all()//fade_element(BitTicket.FEEDBACK_DIV_ID,null,null,null);
 		return;
 		
 		var comment =  DIV(null, null);

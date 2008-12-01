@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_tickets/ajax_header.php,v 1.1 2008/12/01 22:57:19 pppspoonman Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_tickets/ajax_header.php,v 1.2 2008/12/01 23:35:30 pppspoonman Exp $
  * @package liberty
  * @subpackage functions
  */
@@ -45,7 +45,7 @@ if( !$gContent->hasUserPermission( 'p_tickets_ticket_update', TRUE, TRUE)) {
 		require_once $gBitSmarty->_get_plugin_filepath( 'function', 'formfeedback' );
 		$XMLContent = smarty_function_formfeedback( $formfeedback, $gBitSmarty );
 	}
-	$XMLContent .= $gBitSmarty->fetch( 'bitpackage:tickets/edit_header_inc.tpl' );
+	//$XMLContent .= $gBitSmarty->fetch( 'bitpackage:tickets/edit_header_inc.tpl' );
 } else {
 	$statusCode = 405;
 	$XMLContent = tra( "Sorry, you can not post a comment here." );
