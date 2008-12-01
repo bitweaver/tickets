@@ -21,17 +21,7 @@
 		<div class="display ticket">
 			
 	        <ul>
-	        {include file="edit_header_inc.tpl" fieldDefinitions=$fieldDefinitions fieldValues=$fieldValues milestones=$milestones gContent=$gContent}
-	        
-		        <li>		
-					{formlabel label="Milestone" for="ticket_milestone"}
-					{forminput}
-						<span id="ticket_milestone">
-		                	{$gContent->mMilestones[0].title}
-		                </span>
-		            {/forminput}
-		        </li>
-	        
+		        {include file="edit_header_inc.tpl" fieldDefinitions=$fieldDefinitions fieldValues=$fieldValues milestones=$milestones gContent=$gContent}
 	        </ul>
 	        
 	        {* small trick so if ul is all float it widens up to this point *}

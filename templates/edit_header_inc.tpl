@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_header_inc.tpl,v 1.4 2008/11/30 19:56:47 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_header_inc.tpl,v 1.5 2008/12/01 19:07:03 pppspoonman Exp $ *}
 {strip}
     {foreach from=$fieldDefinitions item=fieldDef}
         {if (($gContent->mInfo.ticket_id) || ($fieldDef.use_at_creation == 1)) }
@@ -44,6 +44,7 @@
     			>{$milestone.title}</option>
     		{/foreach}
     		</select>
+    		{formhelp note="Group of named tickets"}
     	{/forminput}
     </li>
 {/strip}
