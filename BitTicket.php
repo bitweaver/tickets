@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.17 2008/11/30 23:28:45 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.17 2008/11/30 23:28:45 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.18 2008/12/02 21:58:44 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.18 2008/12/02 21:58:44 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.17 $ $Date: 2008/11/30 23:28:45 $ $Author: pppspoonman $
+* @version $Revision: 1.18 $ $Date: 2008/12/02 21:58:44 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -153,6 +153,41 @@ class BitTicket extends LibertyMime {
 	}
 
 	/**
+	 * It is a part of normal store that does not write content of a ticket.
+	 * It stores attributes, milestone and assignee.It will find out if these are new,
+	 * updated or removed values. If ticket is not new it will store appropiate rows to ticket history.
+	 * 
+	 * Transaction must be already started before calling this method.
+	 * ticket_id must be set before calling this method.
+	 * 
+	 * @param array $pParamHash hash of values that will be used to store the page
+	 * @access public
+	 * @return boolean TRUE on success, FALSE on failure - mErrors will contain reason for failure
+	 */
+	function storeHeader( &$pParamHash ) {
+        $attrTable = BIT_DB_PREFIX."ticket_attributes";
+        
+        // this array will contain all changed and new attributes
+        // at least 
+        $diffArray = array_diff_assoc( $pParamHash['attributes_store'], $this->mAttributes);
+		
+        foreach( $diffArray as $def_id => $field_id) {
+        	
+        	if ( array_key_exists( $def_id, $this->mAttributes ) ) {
+            	$result = $this->mDb->associateUpdate(
+            		$attrTable,
+            		array( 'ticket_id' => $this->mTicketId, 'field_id' => $this->mAttributes[$def_id] ),
+            		array( 'ticket_id' => $this->mTicketId, 'field_id' => $field_id ) );
+        	} else {
+        		$result = $this->mDb->associateInsert(
+        			$attrTable,
+            		array( 'ticket_id' => $this->mTicketId, 'field_id' => $field_id ) );
+        	}
+        }
+
+	}
+
+	/**
 	 * store Any method named Store inherently implies data will be written to the database
 	 * @param pParamHash be sure to pass by reference in case we need to make modifcations to the hash
 	 * This is the ONLY method that should be called in order to store( create or update )an tickets!
@@ -166,26 +201,12 @@ class BitTicket extends LibertyMime {
 		$this->mDb->StartTrans();
 		if( $this->verify( $pParamHash )&& LibertyMime::store( $pParamHash ) ) {
 			$table = BIT_DB_PREFIX."tickets";
-            $attrTable = BIT_DB_PREFIX."ticket_attributes";
-            $milestoneTable = BIT_DB_PREFIX."ticket_milestone_map";
-            
 
 			if( $this->mTicketId ) {
 				$locId = array( "ticket_id" => $pParamHash['ticket_id'] );
 				$result = $this->mDb->associateUpdate( $table, $pParamHash['ticket_store'], $locId );
-
-                foreach( $pParamHash['attributes_store'] as $attr) {
-                    // if attributes has changed update row and store one in history
-//                    if ( !( array_has_key( $this->mAttributes, $attr['field_guid'] ) ) ) {
-//                        $locId ['field_id'] = $attr['field_id'];
-//                        $result = $this->mDB->associateInsert( $attrTable, array( 'ticket_id' => $this->mTicketId, $attr ) );
-//                    }
-//                    else if ( $this->mAttributes[$attr['field_guid']]['field_value'] != $attr['field_value'] ) {
-//                        $locId ['field_id'] = $attr['field_id'];
-//                        $result = $this->mDB->associateUpdate( $attrTable, array( 'ticket_id' => $this->mTicketId, $attr ) );
-//                    }
-                }
-
+				
+				$this->storeHeader( $pParamHash );
 
 			} else {
 				$pParamHash['ticket_store']['content_id'] = $pParamHash['content_id'];
@@ -198,9 +219,8 @@ class BitTicket extends LibertyMime {
 				$this->mTicketId = $pParamHash['ticket_store']['ticket_id'];
 				$result = $this->mDb->associateInsert( $table, $pParamHash['ticket_store'] );
 				
-                foreach( $pParamHash['attributes_store'] as $attr) {
-                    $result = $this->mDb->associateInsert( $attrTable, array( 'ticket_id' => $this->mTicketId, 'field_id' => $attr ) );
-                }
+				$this->storeHeader( $pParamHash );
+				
 			}
 
 			$this->mDb->CompleteTrans();
