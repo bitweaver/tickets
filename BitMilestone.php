@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.9 2008/11/30 23:11:55 pppspoonman Exp $
-* $Id: BitMilestone.php,v 1.9 2008/11/30 23:11:55 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.10 2008/12/02 21:58:04 pppspoonman Exp $
+* $Id: BitMilestone.php,v 1.10 2008/12/02 21:58:04 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.9 $ $Date: 2008/11/30 23:11:55 $ $Author: pppspoonman $
+* @version $Revision: 1.10 $ $Date: 2008/12/02 21:58:04 $ $Author: pppspoonman $
 * @class BitMilestone
 */
 
@@ -69,7 +69,7 @@ class BitMilestone extends LibertyMime {
 		$this->mContentTypeGuid = BITMILESTONE_CONTENT_TYPE_GUID;
 		$this->registerContentType( BITMILESTONE_CONTENT_TYPE_GUID, array(
 			'content_type_guid'   => BITMILESTONE_CONTENT_TYPE_GUID,
-			'content_description' => 'Milestone is a set of tickets with specified start and end dates.',
+			'content_description' => 'Ticket Milestone',
 			'handler_class'       => 'BitMilestone',
 			'handler_package'     => 'tickets',
 			'handler_file'        => 'BitMilestone.php',
