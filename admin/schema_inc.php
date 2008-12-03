@@ -54,11 +54,13 @@ $tables = array(
 	",
     
     'ticket_history' => "
-        def_id I4,
+        ticket_id I4,
+		change_date I8,
+		def_id I4,
         field_old_value I4,
         field_new_value I4
         CONSTRAINT '
-    		, CONSTRAINT `ticket_history_fkey` FOREIGN KEY( `def_id` ) REFERENCES `".BIT_DB_PREFIX."ticket_field_defs` ( `def_id` )'
+    		, CONSTRAINT `ticket_history_fkey` FOREIGN KEY( `ticket_id` ) REFERENCES `".BIT_DB_PREFIX."tickets` ( `ticket_id` )'
     ",
 
     'ticket_queries' => "
