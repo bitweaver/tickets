@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.18 2008/12/02 21:58:44 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.18 2008/12/02 21:58:44 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.19 2008/12/03 23:28:59 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.19 2008/12/03 23:28:59 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.18 $ $Date: 2008/12/02 21:58:44 $ $Author: pppspoonman $
+* @version $Revision: 1.19 $ $Date: 2008/12/03 23:28:59 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -153,6 +153,26 @@ class BitTicket extends LibertyMime {
 	}
 
 	/**
+	 * This method stores only header. It creates transaction and calls storeHeader.
+	 * It would be successfull only if ticket was already loaded and has valid mTicketId.
+	 * 
+	 * @param array $pParamHash hash of values that will be used to store the page
+	 * @access public
+	 * @return boolean TRUE on success, FALSE on failure - mErrors will contain reason for failure
+	 */
+	function storeOnlyHeader( &$pParamHash ) {
+		$this->mDb->StartTrans();
+		if( $this->mTicketId && $this->verifyHeader( $pParamHash )) {
+			
+			$this->storeHeader( $pParamHash );
+			
+			$this->mDb->CompleteTrans();
+		}
+		
+		return( count( $this->mErrors )== 0 );
+	}
+
+	/**
 	 * It is a part of normal store that does not write content of a ticket.
 	 * It stores attributes, milestone and assignee.It will find out if these are new,
 	 * updated or removed values. If ticket is not new it will store appropiate rows to ticket history.
@@ -161,23 +181,25 @@ class BitTicket extends LibertyMime {
 	 * ticket_id must be set before calling this method.
 	 * 
 	 * @param array $pParamHash hash of values that will be used to store the page
-	 * @access public
+	 * @access private
 	 * @return boolean TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
 	function storeHeader( &$pParamHash ) {
         $attrTable = BIT_DB_PREFIX."ticket_attributes";
-        
-        // this array will contain all changed and new attributes
-        // at least 
-        $diffArray = array_diff_assoc( $pParamHash['attributes_store'], $this->mAttributes);
-		
-        foreach( $diffArray as $def_id => $field_id) {
+
+		//check each incoming value        
+        foreach( $pParamHash['attributes_store'] as $def_id => $field_id) {
         	
-        	if ( array_key_exists( $def_id, $this->mAttributes ) ) {
+        	//if it's changed make an update
+        	if ( array_key_exists( $def_id, $this->mAttributes ) &&
+        		 $this->mAttributes[$def_id]['field_id'] != $field_id ) {
+        		 	
             	$result = $this->mDb->associateUpdate(
             		$attrTable,
-            		array( 'ticket_id' => $this->mTicketId, 'field_id' => $this->mAttributes[$def_id] ),
-            		array( 'ticket_id' => $this->mTicketId, 'field_id' => $field_id ) );
+            		array( 'ticket_id' => $this->mTicketId, 'field_id' => $field_id ),
+            		array( 'ticket_id' => $this->mTicketId, 'field_id' => $this->mAttributes[$def_id]['field_id'] ) );
+            		
+            //otherwise make an insert
         	} else {
         		$result = $this->mDb->associateInsert(
         			$attrTable,
@@ -276,6 +298,27 @@ class BitTicket extends LibertyMime {
 			$this->mErrors['title'] = 'You must specify a name';
 		}
 		
+		$this->verifyHeader( $pParamHash );
+		
+		return( count( $this->mErrors )== 0 );
+	}
+	
+	/**
+	 * This is the part of verify() that verifies only header and mTicketId.
+	 * It's used from verify() itself or when we only try to store header.
+	 * 
+	 * @param array $pParamHash reference to hash of values that will be used to store the page, they will be modified where necessary
+	 * @access private
+	 * @return boolean TRUE on success, FALSE on failure - $this->mErrors will contain reason for failure
+	 */
+	function verifyHeader( &$pParamHash ) {
+		global $gBitUser, $gBitSystem;
+		
+		// make sure we're all loaded up of we have a mTicketId
+		if( $this->verifyId( $this->mTicketId ) && empty( $this->mInfo ) ) {
+			$this->load();
+		}
+		
 		if( !empty( $pParamHash['attributes'] ) ) {
 			$pParamHash['attributes_store'] = $pParamHash['attributes'];
 			unset( $pParamHash['attributes'] );
@@ -286,7 +329,6 @@ class BitTicket extends LibertyMime {
 			unset( $pParamHash['milestone'] );
 		}
 		
-
 		return( count( $this->mErrors )== 0 );
 	}
 

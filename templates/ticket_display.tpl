@@ -21,6 +21,9 @@
 		<div class="display ticket">
 		
 			{form action="`$comments_return_url`#editheader" id="editheader-form"}
+			
+			<input type="hidden" name="ticket[ticket_id]" value="{$gContent->mInfo.ticket_id}" />
+			
 			{formfeedback hash=$formfeedback}
 			
 	        <ul>
