@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.19 2008/12/03 23:28:59 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.19 2008/12/03 23:28:59 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.20 2008/12/04 22:36:25 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.20 2008/12/04 22:36:25 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.19 $ $Date: 2008/12/03 23:28:59 $ $Author: pppspoonman $
+* @version $Revision: 1.20 $ $Date: 2008/12/04 22:36:25 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -185,7 +185,10 @@ class BitTicket extends LibertyMime {
 	 * @return boolean TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
 	function storeHeader( &$pParamHash ) {
+		global $gBitSystem;
+		
         $attrTable = BIT_DB_PREFIX."ticket_attributes";
+        $historyTable = BIT_DB_PREFIX."ticket_history";
 
 		//check each incoming value        
         foreach( $pParamHash['attributes_store'] as $def_id => $field_id) {
@@ -197,7 +200,17 @@ class BitTicket extends LibertyMime {
             	$result = $this->mDb->associateUpdate(
             		$attrTable,
             		array( 'ticket_id' => $this->mTicketId, 'field_id' => $field_id ),
-            		array( 'ticket_id' => $this->mTicketId, 'field_id' => $this->mAttributes[$def_id]['field_id'] ) );
+            		array( 'ticket_id' => $this->mTicketId, 'field_id' => $this->mAttributes[$def_id]['field_id'] ));
+            		
+            	//and make an entry in history
+            	$result = $this->mDb->associateInsert(
+            		$historyTable, array(
+            			'ticket_id' => $this->mTicketId,
+            			'change_date' => $pParamHash['chage_date'],
+            			'def_id' => $def_id,
+            			'field_old_value' =>  $this->mAttributes[$def_id]['field_id'],
+            			'field_new_value' => $field_id
+            		) );
             		
             //otherwise make an insert
         	} else {
@@ -328,6 +341,9 @@ class BitTicket extends LibertyMime {
 			$pParamHash['ticket_store']['milestone_id'] = $pParamHash['milestone'];
 			unset( $pParamHash['milestone'] );
 		}
+		
+        //get date once so all changes will have the same
+		$pParamHash['change_date'] = !empty( $pParamHash['change_date'] ) ? $pParamHash['change_date'] : $gBitSystem->getUTCTime(); 
 		
 		return( count( $this->mErrors )== 0 );
 	}
