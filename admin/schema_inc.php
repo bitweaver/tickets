@@ -56,6 +56,7 @@ $tables = array(
     'ticket_history' => "
         ticket_id I4,
 		change_date I8,
+		user_id I4, 
 		def_id I4,
         field_old_value I4,
         field_new_value I4
