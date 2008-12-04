@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.20 2008/12/04 22:36:25 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.20 2008/12/04 22:36:25 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.21 2008/12/04 23:11:49 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.21 2008/12/04 23:11:49 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.20 $ $Date: 2008/12/04 22:36:25 $ $Author: pppspoonman $
+* @version $Revision: 1.21 $ $Date: 2008/12/04 23:11:49 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -491,12 +491,16 @@ class BitTicket extends LibertyMime {
 		return $ret;
 	}
 
-	static function getFieldValues () {
-		global $gBitDb;
+	/**
+	 * Gets field values for all definitions.
+	 * 
+	 * @return array List of field values.
+	 */
+	function getFieldValues () {
 		
 		$query = "SELECT * FROM `".BIT_DB_PREFIX."ticket_field_values` ORDER BY `sort_order`";
 		
-		$result = $gBitDb->query ($query);
+		$result = $this->mDb->query ($query);
 		$ret = array ();
 		
 		while( $res = $result->fetchRow() ) {
@@ -506,15 +510,21 @@ class BitTicket extends LibertyMime {
 		return $ret;
 	}
 
-	static function getFieldDefinitions () {
-		global $gBitDb;
+	/**
+	 * Get all field definitions.
+	 * 
+	 * @return array List of field definitions.
+	 */
+	function getFieldDefinitions () {
 		
         // use group by rather then distinct
 		$query = "SELECT * FROM `".BIT_DB_PREFIX."ticket_field_defs` WHERE `is_enabled`=1 ORDER BY `sort_order`";
 		
-		$result = $gBitDb->query ($query);
+		$result = $this->mDb->query ($query);
 
         return $result;
 	}
+	
+	
 }
 ?>

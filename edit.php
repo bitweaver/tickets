@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/edit.php,v 1.5 2008/11/26 18:22:03 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/edit.php,v 1.6 2008/12/04 23:11:49 pppspoonman Exp $
 // Copyright (c) 2004 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -56,9 +56,11 @@ if( !empty( $_REQUEST["save_ticket"] ) ) {
 }
 
 // Get necessary lists.
-$fieldDefinitions = BitTicket::getFieldDefinitions();
+$contextTicket = new BitTicket();
+
+$fieldDefinitions = $contextTicket->getFieldDefinitions();
 $gBitSmarty->assign( 'fieldDefinitions', $fieldDefinitions);
-$fieldValues = BitTicket::getFieldValues();
+$fieldValues = $contextTicket->getFieldValues();
 $gBitSmarty->assign( 'fieldValues', $fieldValues);
 
 $milestone = new BitMilestone();

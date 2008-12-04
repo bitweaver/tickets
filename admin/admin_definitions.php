@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_tickets/admin/admin_definitions.php,v 1.1 2008/11/30 17:09:32 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/admin/admin_definitions.php,v 1.2 2008/12/04 23:11:49 pppspoonman Exp $
 require_once( '../../bit_setup_inc.php' );
 
 include_once( TICKETS_PKG_PATH.'BitTicket.php' );
@@ -11,10 +11,10 @@ $gBitSystem->verifyPermission( 'p_tickets_admin' );
 
 $ticket = new BitTicket();
 
-$fieldDefinitions = BitTicket::getFieldDefinitions ();
+$fieldDefinitions = $ticket->getFieldDefinitions ();
 $gBitSmarty->assign_by_ref( 'fieldDefinitions', $fieldDefinitions );
 
-$fieldValues = BitTicket::getFieldValues ();
+$fieldValues = $ticket->getFieldValues ();
 $gBitSmarty->assign_by_ref( 'fieldValues', $fieldValues);
 
 $gBitSystem->display( 'bitpackage:tickets/admin_definitions.tpl', tra( 'Edit Field Definitions' ) , array( 'display_mode' => 'admin' ));
