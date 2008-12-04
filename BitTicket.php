@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.21 2008/12/04 23:11:49 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.21 2008/12/04 23:11:49 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.22 2008/12/04 23:37:19 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.22 2008/12/04 23:37:19 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.21 $ $Date: 2008/12/04 23:11:49 $ $Author: pppspoonman $
+* @version $Revision: 1.22 $ $Date: 2008/12/04 23:37:19 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -185,7 +185,7 @@ class BitTicket extends LibertyMime {
 	 * @return boolean TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
 	function storeHeader( &$pParamHash ) {
-		global $gBitSystem;
+		global $gBitSystem, $gBitUser;
 		
         $attrTable = BIT_DB_PREFIX."ticket_attributes";
         $historyTable = BIT_DB_PREFIX."ticket_history";
@@ -206,9 +206,10 @@ class BitTicket extends LibertyMime {
             	$result = $this->mDb->associateInsert(
             		$historyTable, array(
             			'ticket_id' => $this->mTicketId,
+            			'user_id' => $gBitUser->mUserId,
             			'change_date' => $pParamHash['chage_date'],
             			'def_id' => $def_id,
-            			'field_old_value' =>  $this->mAttributes[$def_id]['field_id'],
+            			'field_old_value' => $this->mAttributes[$def_id]['field_id'],
             			'field_new_value' => $field_id
             		) );
             		
@@ -525,6 +526,34 @@ class BitTicket extends LibertyMime {
         return $result;
 	}
 	
-	
+	/**
+	 * This method loads ticket history changes.
+	 */
+	function loadTicketHistory( $exactDate ) {
+		
+		$params = array ( $this->mTicketId );
+		
+		if ( !empty ($exactDate) ) {
+			$where = " AND `change_date`=?";
+			array_push($params, $exactDate);
+		}
+		
+		$query = "SELECT th.*,
+					tfd.`title` AS def_title,
+					tfv_old.`title` AS old_title,
+					tfv_new.`title` AS new_title,
+					uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name
+				FROM `".BIT_DB_PREFIX."ticket_history` th,
+				LEFT JOIN `".BIT_DB_PREFIX."ticket_field_defs` tfd ON (tfd.`def_id` = th.`def_id`)
+				LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( tfd.`user_id` = uuc.`user_id` )
+				LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values` tfv_old ON (tfv_old.`field_id` = th.`field_old_value`)
+				LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values` tfv_new ON (tfv_new.`field_id` = th.`field_new_value`)
+
+				WHERE `ticket_id`=? $where";
+			
+		$result = $this->mDb->query( $query );
+		
+		return $result;
+	}
 }
 ?>
