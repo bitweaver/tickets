@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.10 2008/12/02 21:58:04 pppspoonman Exp $
-* $Id: BitMilestone.php,v 1.10 2008/12/02 21:58:04 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitMilestone.php,v 1.11 2008/12/05 22:19:41 pppspoonman Exp $
+* $Id: BitMilestone.php,v 1.11 2008/12/05 22:19:41 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.10 $ $Date: 2008/12/02 21:58:04 $ $Author: pppspoonman $
+* @version $Revision: 1.11 $ $Date: 2008/12/05 22:19:41 $ $Author: pppspoonman $
 * @class BitMilestone
 */
 
@@ -122,8 +122,8 @@ class BitMilestone extends LibertyMime {
 				
 				$date = new BitDate ();
 				
-				$this->mDateFrom = $date->getDisplayDateFromUTC( $result->fields['date_from'] );
-				$this->mDateTo = $date->getDisplayDateFromUTC( $result->fields['date_to'] );
+				$this->mDateFrom = $result->fields['date_from'];
+				$this->mDateTo = $result->fields['date_to'];
 
 				$this->mInfo['creator'] = ( !empty( $result->fields['creator_real_name'] ) ? $result->fields['creator_real_name'] : $result->fields['creator_user'] );
 				$this->mInfo['editor'] = ( !empty( $result->fields['modifier_real_name'] ) ? $result->fields['modifier_real_name'] : $result->fields['modifier_user'] );
