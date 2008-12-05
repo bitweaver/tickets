@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.22 2008/12/04 23:37:19 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.22 2008/12/04 23:37:19 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.23 2008/12/05 23:03:48 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.23 2008/12/05 23:03:48 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.22 $ $Date: 2008/12/04 23:37:19 $ $Author: pppspoonman $
+* @version $Revision: 1.23 $ $Date: 2008/12/05 23:03:48 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -50,6 +50,15 @@ class BitTicket extends LibertyMime {
      * @access public
      */
     var $mMilestone;
+    
+    /**
+     * History with ticket changes.
+     * It can be loaded even if content is not loaded. There may be times when you want only ticket history.
+     * Call loadTicketHistory() when correct mTicketId is set.
+     * @var array
+     * @access public
+     */
+    var $mHistory;
 
 	/**
 	 * BitTicket During initialisation, be sure to call our base constructors
@@ -207,7 +216,7 @@ class BitTicket extends LibertyMime {
             		$historyTable, array(
             			'ticket_id' => $this->mTicketId,
             			'user_id' => $gBitUser->mUserId,
-            			'change_date' => $pParamHash['chage_date'],
+            			'change_date' => $pParamHash['change_date'],
             			'def_id' => $def_id,
             			'field_old_value' => $this->mAttributes[$def_id]['field_id'],
             			'field_new_value' => $field_id
@@ -518,7 +527,6 @@ class BitTicket extends LibertyMime {
 	 */
 	function getFieldDefinitions () {
 		
-        // use group by rather then distinct
 		$query = "SELECT * FROM `".BIT_DB_PREFIX."ticket_field_defs` WHERE `is_enabled`=1 ORDER BY `sort_order`";
 		
 		$result = $this->mDb->query ($query);
@@ -528,9 +536,12 @@ class BitTicket extends LibertyMime {
 	
 	/**
 	 * This method loads ticket history changes.
+	 * @param exactDate Set it if you want to load only history on exact date.
+	 * @return boolean TRUE on success, FALSE on failure - mErrors will contain reason for failure
 	 */
-	function loadTicketHistory( $exactDate ) {
+	function loadTicketHistory( $exactDate=NULL) {
 		
+		$where = "";
 		$params = array ( $this->mTicketId );
 		
 		if ( !empty ($exactDate) ) {
@@ -540,20 +551,24 @@ class BitTicket extends LibertyMime {
 		
 		$query = "SELECT th.*,
 					tfd.`title` AS def_title,
-					tfv_old.`title` AS old_title,
-					tfv_new.`title` AS new_title,
+					tfv_old.`field_value` AS old_value,
+					tfv_new.`field_value` AS new_value,
 					uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name
-				FROM `".BIT_DB_PREFIX."ticket_history` th,
+				FROM `".BIT_DB_PREFIX."ticket_history` th
 				LEFT JOIN `".BIT_DB_PREFIX."ticket_field_defs` tfd ON (tfd.`def_id` = th.`def_id`)
-				LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( tfd.`user_id` = uuc.`user_id` )
+				LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( th.`user_id` = uuc.`user_id` )
 				LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values` tfv_old ON (tfv_old.`field_id` = th.`field_old_value`)
 				LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values` tfv_new ON (tfv_new.`field_id` = th.`field_new_value`)
 
-				WHERE `ticket_id`=? $where";
+				WHERE th.`ticket_id`=? $where";
 			
-		$result = $this->mDb->query( $query );
+		$result = $this->mDb->query( $query, $params );
 		
-		return $result;
+		while ( $row = $result->fetchRow() ) {
+			$this->mHistory[] = $row;
+		}
+		
+		return( count( $this->mErrors )== 0 );
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/list_tickets.php,v 1.7 2008/11/22 12:55:36 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/list_tickets.php,v 1.8 2008/12/05 23:03:48 pppspoonman Exp $
 // Copyright (c) 2008 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -57,7 +57,7 @@ $tickets = new BitTicket();
 $ticketsList = $tickets->getList( $_REQUEST );
 $gBitSmarty->assign_by_ref( 'ticketsList', $ticketsList );
 
-$fieldDefinitions = BitTicket::getFieldDefinitions ();
+$fieldDefinitions = $tickets->getFieldDefinitions ();
 $gBitSmarty->assign_by_ref( 'fieldDefinitions', $fieldDefinitions );
 
 // getList() has now placed all the pagination information in $_REQUEST['listInfo']

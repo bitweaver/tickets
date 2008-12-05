@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/index.php,v 1.9 2008/12/04 23:11:49 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/index.php,v 1.10 2008/12/05 23:03:48 pppspoonman Exp $
 // Copyright (c) 2004 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -41,6 +41,9 @@ if( is_object( $gContent ) && $gContent->isCommentable() ) {
 	$gBitSmarty->assign( 'item_display_comments', TRUE );
 	include_once( LIBERTY_PKG_PATH.'comments_inc.php' );
 }
+
+// Load ticket history.
+$gContent->loadTicketHistory();
 
 // Get necessary lists.
 $contextTicket = new BitTicket();

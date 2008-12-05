@@ -8,10 +8,22 @@
 
 		{include file="bitpackage:liberty/comments_display_option_bar.tpl"}
 		
-		
 			{foreach name=comments_loop key=key item=item from=$comments}
+                {* it's not optimal but there aren't many items in here *}
+                {foreach from=$gContent->mHistory item=history}
+                    {if $history.change_date < $item.create_date}
+                        {include file="bitpackage:tickets/list_history_inc.tpl" history=$history}
+                    {/if}
+                {/foreach}
 				{displaycomment comment="$item"}
-			{/foreach}		
+			{foreachelse}
+				{foreach from=$gContent->mHistory item=history}
+                    {include file="bitpackage:tickets/list_history_inc.tpl" history=$history}
+                {/foreach}
+			{/foreach}
+			{foreach from=$gContent->mHistory item=history}
+                    {include file="bitpackage:tickets/list_history_inc.tpl" history=$history}
+                {/foreach}
 		
 		
 		{if $comments_ajax && $gBitUser->hasPermission( 'p_liberty_post_comments' )}
