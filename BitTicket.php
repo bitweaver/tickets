@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.23 2008/12/05 23:03:48 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.23 2008/12/05 23:03:48 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.24 2008/12/09 22:10:45 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.24 2008/12/09 22:10:45 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.23 $ $Date: 2008/12/05 23:03:48 $ $Author: pppspoonman $
+* @version $Revision: 1.24 $ $Date: 2008/12/09 22:10:45 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -356,6 +356,33 @@ class BitTicket extends LibertyMime {
 		$pParamHash['change_date'] = !empty( $pParamHash['change_date'] ) ? $pParamHash['change_date'] : $gBitSystem->getUTCTime(); 
 		
 		return( count( $this->mErrors )== 0 );
+	}
+
+	/**
+	 * It merges real Liberty comments with ticket's history into one array.
+	 * It's a very sepcial method for ticket. It is needed for Smarty to iterate with foreach
+	 * and display comments and history in a datetime descending order.
+	 * Array of comments and $this->mHistory is sorted by datetime descending order, keys are UTC datetime
+	 * and there is distinguish field added 'isRealComment' with is TRUE for comment and FALSE for history.
+	 * 
+	 * History must be already loaded with loadTicketHistory().
+	 * @param comments Liberty comments array.
+	 * @return array Merged array of comments and history.
+	 */
+	function mergeCommentsWithHistory ( &$comments ) {
+		$ret = array();
+		foreach( $comments as $comment) {
+			$comment['isRealComment'] = true;
+			$ret[$comment['created']] = $comment;
+		}
+		
+		foreach( $this->mHistory as $history ) {
+			$history['isRealComment'] = false;
+			$ret[$history['change_date']] = $history;
+		}
+		
+		ksort ( $ret, SORT_NUMERIC );
+		return $ret;
 	}
 
 	/**
