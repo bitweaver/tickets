@@ -35,7 +35,7 @@
 	        <div class="clear" id="asd"></div>
 	        
 			<div class="row submit">
-				<input type="submit" name="post_header_request" value="{tr}Submit header changes{/tr}" onclick="BitTicket.postHeader();return false;"/>
+				<input type="submit" name="post_header_request" value="{tr}Submit header changes{/tr}" onclick="BitTicket.attach('{$gContent->mContentId}');BitTicket.postHeader();return false;"/>
 			</div>
 			
 			{/form}

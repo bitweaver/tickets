@@ -5,6 +5,10 @@ BitTicket = {
 	'REPLY_ID':null,
 	'FEEDBACK_DIV_ID':'editheader-feedback',
 	
+	'attach': function(reply_id){
+		BitTicket.REPLY_ID=reply_id;
+	},
+	
 	'postHeader': function(){
 		var f = MochiKit.DOM.formContents( $(BitTicket.FORM_ID) );
 		for (n in f[0]){
@@ -27,24 +31,19 @@ BitTicket = {
 	},
 	'displayHeader': function(rslt){
 		var xml = rslt.responseXML;
-		$(BitTicket.FEEDBACK_DIV_ID).innerHTML = xml.documentElement.getElementsByTagName('content')[0].firstChild.nodeValue;
-		Fat.fade_all()//fade_element(BitTicket.FEEDBACK_DIV_ID,null,null,null);
-		return;
+		$(BitTicket.FEEDBACK_DIV_ID).innerHTML = xml.documentElement.getElementsByTagName('formfeedback')[0].firstChild.nodeValue;
+		Fat.fade_all();//fade_element(BitTicket.FEEDBACK_DIV_ID,null,null,null);
 		
 		var comment =  DIV(null, null);
 		comment.innerHTML = xml.documentElement.getElementsByTagName('content')[0].firstChild.nodeValue;
-		comment.style.marginLeft = (LibertyComment.REPLY_ID != LibertyComment.ROOT_ID)?"20px":'0';
 		comment.style.display = 'none';
 		if (LibertyComment.SORT_MODE == "commentDate_asc"){
-			MochiKit.DOM.insertSiblingNodesBefore( $('comment_'+LibertyComment.REPLY_ID+'_footer'), comment );
+			MochiKit.DOM.insertSiblingNodesBefore( $('comment_'+BitTicket.REPLY_ID+'_footer'), comment );
 		}else{
-			MochiKit.DOM.insertSiblingNodesAfter( $('comment_'+LibertyComment.REPLY_ID), comment );
+			MochiKit.DOM.insertSiblingNodesAfter( $('comment_'+BitTicket.REPLY_ID), comment );
 		}
 
-		LibertyComment.cancelPreview( true );
-		MochiKit.Visual.blindUp( LibertyComment.FORM_DIV_ID, {afterFinish: function(){
-			LibertyComment.detachForm();
-			LibertyComment.resetForm();
+		MochiKit.Visual.blindUp( BitTicket.FORM_DIV_ID, {afterFinish: function(){
 			MochiKit.Visual.blindDown( comment, {afterFinish: function(){
 				if ( LibertyComment.BROWSER != "ie" ){
 					MochiKit.Visual.ScrollTo( comment );				

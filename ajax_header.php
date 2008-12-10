@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_tickets/ajax_header.php,v 1.3 2008/12/03 23:28:59 pppspoonman Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_tickets/ajax_header.php,v 1.4 2008/12/10 23:18:17 pppspoonman Exp $
  * @package liberty
  * @subpackage functions
  */
@@ -13,10 +13,11 @@ require_once( '../bit_setup_inc.php' );
 require_once( 'lookup_tickets_inc.php' );
  
 $XMLContent = "";
+$feedback = "";
 
 if( !$gContent->hasUserPermission( 'p_tickets_update', TRUE, TRUE)) {
 	$statusCode = 401;
-	$XMLContent = tra( "You do not have the required permissions to update this ticket" );
+	$formfeedback['error'] = tra( "You do not have the required permissions to update this ticket" );
 } elseif( $gContent->isCommentable() ) {
 	/* If we are receiving ajax comments request make sure our results also know 
 	   we are using ajax comments. This is an insurance measure that if the originating content 
@@ -30,7 +31,14 @@ if( !$gContent->hasUserPermission( 'p_tickets_update', TRUE, TRUE)) {
 			$statusCode = 200;
 			$formfeedback['success'] = tra( "Your changes were successfully saved." );
 			
-			//$postComment['parsed_data'] = $storeComment->parseData( $postComment );
+			//It was passed by reference so change_date was set for us!
+			$gContent->loadTicketHistory($_REQUEST['ticket']['change_date']);
+			
+			//Play as Smarty's foreach :)
+			foreach($gContent->mHistory as $history) {
+				$gBitSmarty->assign_by_ref('history', $history);
+				$XMLContent .= $gBitSmarty->fetch( 'bitpackage:tickets/list_history_inc.tpl' );
+			}
 		}else{
 			//if store is requested but it fails for some reason - like captcha mismatch
 			$statusCode = 400;
@@ -39,23 +47,22 @@ if( !$gContent->hasUserPermission( 'p_tickets_update', TRUE, TRUE)) {
 	}else{
 		//we assume preview request which we return as ok - our js callback knows what to do when preview is requested
 		$statusCode = 200;
-		$formfeedback['error'] = "fak";
+		$formfeedback['error'] = "This may be the case later when comment is posted along with history in one query. Be sure to cleanup this later";
 	}
-	//$gBitSmarty->assign('comment', $postComment);
-	//$gBitSmarty->assign('commentsParentId', $commentsParentId);
-	if( !empty($formfeedback) ){
-		$statusCode = 400;
-		require_once $gBitSmarty->_get_plugin_filepath( 'function', 'formfeedback' );
-		$XMLContent = smarty_function_formfeedback( $formfeedback, $gBitSmarty );
-	}
-	//$XMLContent .= $gBitSmarty->fetch( 'bitpackage:tickets/edit_header_inc.tpl' );
+	
 } else {
 	$statusCode = 405;
-	$XMLContent = tra( "Sorry, you can not post a comment here." );
+	$formfeedback['error'] = tra( "Sorry, you can not post a comment here." );
+}
+
+if( !empty($formfeedback) ){
+	require_once $gBitSmarty->_get_plugin_filepath( 'function', 'formfeedback' );
+	$feedback = smarty_function_formfeedback( $formfeedback, $gBitSmarty );
 }
 
 //We return XML with a status code
 $mRet = "<req><status><code>".$statusCode."</code></status>"
+	."<formfeedback><![CDATA[".$feedback."]]></formfeedback>"
 	."<content><![CDATA[".$XMLContent."]]></content></req>";
 
 //since we are returning xml we must report so in the header
