@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.24 2008/12/09 22:10:45 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.24 2008/12/09 22:10:45 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.25 2008/12/11 23:17:43 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.25 2008/12/11 23:17:43 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.24 $ $Date: 2008/12/09 22:10:45 $ $Author: pppspoonman $
+* @version $Revision: 1.25 $ $Date: 2008/12/11 23:17:43 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -376,9 +376,11 @@ class BitTicket extends LibertyMime {
 			$ret[$comment['created']] = $comment;
 		}
 		
-		foreach( $this->mHistory as $history ) {
-			$history['isRealComment'] = false;
-			$ret[$history['change_date']] = $history;
+		if ( $this->mHistory ) {
+			foreach( $this->mHistory as $history ) {
+				$history['isRealComment'] = false;
+				$ret[$history['change_date']] = $history;
+			}
 		}
 		
 		ksort ( $ret, SORT_NUMERIC );
