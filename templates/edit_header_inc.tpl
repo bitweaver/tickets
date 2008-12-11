@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_header_inc.tpl,v 1.5 2008/12/01 19:07:03 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_header_inc.tpl,v 1.6 2008/12/11 23:12:42 pppspoonman Exp $ *}
 {strip}
     {foreach from=$fieldDefinitions item=fieldDef}
         {if (($gContent->mInfo.ticket_id) || ($fieldDef.use_at_creation == 1)) }
@@ -6,7 +6,7 @@
             {formlabel label=$fieldDef.title|capitalize for=$fieldDef.title}
             {forminput}
             	{if $gBitUser->hasPermission( 'p_tickets_update' )}
-	                <select name="ticket[attributes][{$fieldDef.def_id}]" id="{$fieldDef.title}">
+	                <select name="ticket[attributes][{$fieldDef.def_id}]" id="{$fieldDef.title}" onchange="BitTicket.headerChanged();">
 	                {foreach from=$fieldValues[$fieldDef.def_id] item=fieldRow}
 	                    <option value="{$fieldRow.field_id}"
 	                    {if ($gContent->mInfo.ticket_id && $gContent->mAttributes[$fieldDef.def_id].field_id == $fieldRow.field_id) || (empty($gContent->mInfo.ticket_id) && $fieldRow.is_default == 1)} selected="selected"{/if}

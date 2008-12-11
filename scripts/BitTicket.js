@@ -4,9 +4,20 @@ BitTicket = {
 	'FORM_ID':'editheader-form',
 	'REPLY_ID':null,
 	'FEEDBACK_DIV_ID':'editheader-feedback',
+	'SUBMIT_HEADER_CHANGES_DIV_ID':'submitHeaderChanges',
 	
 	'attach': function(reply_id){
 		BitTicket.REPLY_ID=reply_id;
+	},
+	
+	'headerChanged': function(){
+		var div=$(BitTicket.SUBMIT_HEADER_CHANGES_DIV_ID);
+		
+		if(div==null || div==undefined || div.style.display=='block')
+			return;
+		
+		MochiKit.Visual.blindDown( BitTicket.SUBMIT_HEADER_CHANGES_DIV_ID);
+		
 	},
 	
 	'postHeader': function(){

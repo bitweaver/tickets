@@ -34,9 +34,11 @@
 			<div class="clear" id="editheader-feedback"></div>
 	        <div class="clear" id="asd"></div>
 	        
-			<div class="row submit">
+	        {if $gBitUser->hasPermission( 'p_tickets_update' )}
+			<div class="row submit" id="submitHeaderChanges" style="display:none">
 				<input type="submit" name="post_header_request" value="{tr}Submit header changes{/tr}" onclick="BitTicket.attach('{$gContent->mContentId}');BitTicket.postHeader();return false;"/>
 			</div>
+			{/if}
 			
 			{/form}
 	        
