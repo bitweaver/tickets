@@ -1,0 +1,11 @@
+@CHARSET "UTF-8";
+
+/* rows */
+
+.tk-row-blocker				{ font-weight: bold; }
+.tk-row-feature-request		{ font-style: italic; }
+
+/* cells */
+
+.tk-cell-blocker    		{ background-color: #FF8080 !important; }
+.tk-cell-major      		{ background-color: #FFBFBF !important; }

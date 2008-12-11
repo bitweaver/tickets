@@ -1,5 +1,5 @@
 <?php
-global $gBitSystem;
+global $gBitSystem, $gBitThemes;
 
 $registerHash = array(
 	'package_name' => 'tickets',
@@ -15,5 +15,7 @@ if( $gBitSystem->isPackageActive( 'tickets' ) ) {
 		'menu_template' => 'bitpackage:tickets/menu_tickets.tpl',
 	);
 	$gBitSystem->registerAppMenu( $menuHash );
+	
+	$gBitThemes->loadCss( TICKETS_PKG_PATH.'styles/tickets.css' );
 }
 ?>

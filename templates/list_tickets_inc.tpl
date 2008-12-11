@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets_inc.tpl,v 1.1 2008/11/25 23:33:17 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets_inc.tpl,v 1.2 2008/12/11 22:45:51 pppspoonman Exp $ *}
 {strip}
 	{minifind sort_mode=$sort_mode}
 
@@ -32,7 +32,7 @@
 			</tr>
 			
 			{foreach item=ticket from=$ticketsList}
-				<tr class="{cycle values="even,odd"}">
+				<tr class="{cycle values="even,odd"} {foreach from=$fieldDefinitions item=field}tk-row-{$ticket.attributes[$field.def_id].field_value|lower|strip:'-'} {/foreach}">
 					{if $gBitSystem->isFeatureActive( 'tickets_list_ticket_id' )}
 						<td><a href="{$smarty.const.TICKETS_PKG_URL}index.php?ticket_id={$ticket.ticket_id|escape:"url"}" title="{$ticket.ticket_id}">{$ticket.ticket_id}</a></td>
 					{/if}
@@ -44,7 +44,7 @@
 					<td>{displayname login=$ticket.creator_user real_name=$ticket.creator_real_name}</td>
 					
 					{foreach from=$fieldDefinitions item=field}
-						<td>{$ticket.attributes[$field.def_id].field_value}</td>
+						<td class="tk-cell-{$ticket.attributes[$field.def_id].field_value|lower|strip:'-'}">{$ticket.attributes[$field.def_id].field_value}</td>
 					{/foreach}
 					
 					{if $gBitSystem->isFeatureActive( 'tickets_list_data' )}
