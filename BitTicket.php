@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.25 2008/12/11 23:17:43 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.25 2008/12/11 23:17:43 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.26 2008/12/18 20:55:33 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.26 2008/12/18 20:55:33 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.25 $ $Date: 2008/12/11 23:17:43 $ $Author: pppspoonman $
+* @version $Revision: 1.26 $ $Date: 2008/12/18 20:55:33 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -598,6 +598,37 @@ class BitTicket extends LibertyMime {
 		}
 		
 		return( count( $this->mErrors )== 0 );
+	}
+	
+	/**
+	 * Loads field definition and field value names for data.history plugin.
+	 * 
+	 * @param array History identifier(s).
+	 * @param array Plugin parameters.
+	 * @access default (almost private)
+	 * @return nothing
+	 */
+	function getHistoryFieldNames( $historyId, &$pParamHash ) {
+		//I don't validate parametrs here, read comments.
+		
+		$query = "SELECT th.*,
+					tfd.`title` AS def_title,
+					tfv_old.`field_value` AS old_value,
+					tfv_new.`field_value` AS new_value,
+					uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name
+				FROM `".BIT_DB_PREFIX."ticket_history` th
+				LEFT JOIN `".BIT_DB_PREFIX."ticket_field_defs` tfd ON (tfd.`def_id` = th.`def_id`)
+				LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON( th.`user_id` = uuc.`user_id` )
+				LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values` tfv_old ON (tfv_old.`field_id` = th.`field_old_value`)
+				LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values` tfv_new ON (tfv_new.`field_id` = th.`field_new_value`)
+
+				WHERE th.`history_id`=?";
+		
+		$result = $this->mDb->getRow( $query, array ( $historyId ) );
+		
+		$pParamHash['def_title'] = $result['def_title'];
+		$pParamHash['old_value'] = $result['old_value'];
+		$pParamHash['new_value'] = $result['new_value'];
 	}
 }
 ?>
