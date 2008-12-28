@@ -10,6 +10,19 @@ BitTicket = {
 		BitTicket.REPLY_ID=reply_id;
 	},
 	
+	'setLibertyComment': function() {
+		if( typeof(LibertyComment.prepRequestSrvc) != 'undefined' ) {
+			LibertyComment.prepRequestSrvc.push( BitTicket.prepRequest );
+		}
+	},
+	
+	'prepRequest': function() {
+		var f = MochiKit.DOM.formContents( $(BitTicket.FORM_ID) );
+		for (n in f[0]){
+			MochiKit.DOM.appendChildNodes(LibertyComment.FORM_ID, INPUT({"name": f[0][n], "value": f[1][n]}));
+		}
+	},
+	
 	'headerChanged': function(){
 		var div=$(BitTicket.SUBMIT_HEADER_CHANGES_DIV_ID);
 		

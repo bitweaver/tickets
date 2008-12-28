@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/index.php,v 1.11 2008/12/09 22:16:13 pppspoonman Exp $
+// $Header: /cvsroot/bitweaver/_bit_tickets/index.php,v 1.12 2008/12/28 00:15:24 pppspoonman Exp $
 // Copyright (c) 2004 bitweaver Tickets
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
@@ -41,13 +41,6 @@ if( is_object( $gContent ) && $gContent->isCommentable() ) {
 	$gBitSmarty->assign( 'item_display_comments', TRUE );
 	include_once( LIBERTY_PKG_PATH.'comments_inc.php' );
 }
-
-// Load ticket history.
-$gContent->loadTicketHistory();
-
-// Comments were set to Smarty by reference so I get it from there and merge with history.
-$comments = $gContent->mergeCommentsWithHistory( $gBitSmarty->get_template_vars ("comments") );
-$gBitSmarty->assign_by_ref( 'comments', $comments);
 
 // Get necessary lists.
 $contextTicket = new BitTicket();

@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.26 2008/12/18 20:55:33 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.26 2008/12/18 20:55:33 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.27 2008/12/28 00:15:24 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.27 2008/12/28 00:15:24 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.26 $ $Date: 2008/12/18 20:55:33 $ $Author: pppspoonman $
+* @version $Revision: 1.27 $ $Date: 2008/12/28 00:15:24 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -198,6 +198,7 @@ class BitTicket extends LibertyMime {
 		
         $attrTable = BIT_DB_PREFIX."ticket_attributes";
         $historyTable = BIT_DB_PREFIX."ticket_history";
+        $historyIds = array();
 
 		//check each incoming value        
         foreach( $pParamHash['attributes_store'] as $def_id => $field_id) {
@@ -212,8 +213,10 @@ class BitTicket extends LibertyMime {
             		array( 'ticket_id' => $this->mTicketId, 'field_id' => $this->mAttributes[$def_id]['field_id'] ));
             		
             	//and make an entry in history
+            	$insertId = $this->mDb->GenID( 'ticket_history_id_seq');
             	$result = $this->mDb->associateInsert(
             		$historyTable, array(
+            			'history_id' => $insertId,
             			'ticket_id' => $this->mTicketId,
             			'user_id' => $gBitUser->mUserId,
             			'change_date' => $pParamHash['change_date'],
@@ -222,13 +225,18 @@ class BitTicket extends LibertyMime {
             			'field_new_value' => $field_id
             		) );
             		
+            	if( $result )
+            		array_push( $historyIds, $insertId );
+            		
             //otherwise make an insert
-        	} else {
+        	} elseif( !empty( $field_id )) {
         		$result = $this->mDb->associateInsert(
         			$attrTable,
             		array( 'ticket_id' => $this->mTicketId, 'field_id' => $field_id ) );
         	}
         }
+        
+        $pParamHash['historyIds'] = $historyIds;
 
 	}
 
@@ -356,35 +364,6 @@ class BitTicket extends LibertyMime {
 		$pParamHash['change_date'] = !empty( $pParamHash['change_date'] ) ? $pParamHash['change_date'] : $gBitSystem->getUTCTime(); 
 		
 		return( count( $this->mErrors )== 0 );
-	}
-
-	/**
-	 * It merges real Liberty comments with ticket's history into one array.
-	 * It's a very sepcial method for ticket. It is needed for Smarty to iterate with foreach
-	 * and display comments and history in a datetime descending order.
-	 * Array of comments and $this->mHistory is sorted by datetime descending order, keys are UTC datetime
-	 * and there is distinguish field added 'isRealComment' with is TRUE for comment and FALSE for history.
-	 * 
-	 * History must be already loaded with loadTicketHistory().
-	 * @param comments Liberty comments array.
-	 * @return array Merged array of comments and history.
-	 */
-	function mergeCommentsWithHistory ( &$comments ) {
-		$ret = array();
-		foreach( $comments as $comment) {
-			$comment['isRealComment'] = true;
-			$ret[$comment['created']] = $comment;
-		}
-		
-		if ( $this->mHistory ) {
-			foreach( $this->mHistory as $history ) {
-				$history['isRealComment'] = false;
-				$ret[$history['change_date']] = $history;
-			}
-		}
-		
-		ksort ( $ret, SORT_NUMERIC );
-		return $ret;
 	}
 
 	/**

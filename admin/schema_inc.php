@@ -103,9 +103,10 @@ $gBitInstaller->registerSchemaIndexes( TICKETS_PKG_NAME, $indices );
 
 // ### Sequences
 $sequences = array (
-);
 //	'tickets_ticket_id_seq'      => array( 'start' => 1 ),
 //	'tickets_ticket_field_defs_field_id_seq'      => array( 'start' => 1 )
+	'ticket_history_id_seq'      => array( 'start' => 1 )
+);
 $gBitInstaller->registerSchemaSequences( TICKETS_PKG_NAME, $sequences );
 
 $insertTicketFieldDefs   = "INSERT INTO `".BIT_DB_PREFIX."ticket_field_defs` (`title`, `description, `sort_order`, `use_at_creation`, `is_enabled`)";
