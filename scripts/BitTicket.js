@@ -22,17 +22,7 @@ BitTicket = {
 			MochiKit.DOM.appendChildNodes(LibertyComment.FORM_ID, INPUT({"name": f[0][n], "value": f[1][n]}));
 		}
 	},
-	
-	'headerChanged': function(){
-		var div=$(BitTicket.SUBMIT_HEADER_CHANGES_DIV_ID);
 		
-		if(div==null || div==undefined || div.style.display=='block')
-			return;
-		
-		MochiKit.Visual.blindDown( BitTicket.SUBMIT_HEADER_CHANGES_DIV_ID);
-		
-	},
-	
 	'postHeader': function(){
 		var f = MochiKit.DOM.formContents( $(BitTicket.FORM_ID) );
 		for (n in f[0]){
