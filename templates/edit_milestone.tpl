@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_milestone.tpl,v 1.1 2008/11/23 23:21:06 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_milestone.tpl,v 1.2 2009/01/20 22:18:07 dansut Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -56,7 +56,7 @@
 						{textarea name="milestone[edit]"}{/textarea}
 
 						{* any simple service edit options *}
-						{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_mini_tpl}
+						{include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_mini_tpl"}
 
 						<div class="row submit">
 							<input type="submit" name="preview" value="{tr}Preview{/tr}" /> 
@@ -66,7 +66,7 @@
 				{/jstab}
 
 				{* any service edit template tabs *}
-				{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_tab_tpl}
+				{include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_tab_tpl"}
 			{/jstabs}
 		{/form}
 	</div><!-- end .body -->

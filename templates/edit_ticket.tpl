@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.10 2008/11/30 19:42:55 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_ticket.tpl,v 1.11 2009/01/20 22:18:07 dansut Exp $ *}
 {strip}
 <div class="floaticon">{bithelp}</div>
 
@@ -29,12 +29,12 @@
 
 						<div class="display ticket">
 							<ul>
-	                        	{include file="edit_header_inc.tpl" fieldDefinitions=$fieldDefinitions fieldValues=$fieldValues milestones=$milestones gContent=$gContent}
-                        	</ul>
-                        	<div class="clear"></div>
-                        </div>
-                        
-                        <div class="row">
+								{include file="edit_header_inc.tpl" fieldDefinitions=$fieldDefinitions fieldValues=$fieldValues milestones=$milestones gContent=$gContent}
+							</ul>
+							<div class="clear"></div>
+						</div>
+
+						<div class="row">
 							{formlabel label="Title" for="title"}
 							{forminput}
 								<input type="text" size="60" maxlength="200" name="ticket[title]" id="title" value="{$gContent->mInfo.title|escape}" />
@@ -45,7 +45,7 @@
 						{textarea name="ticket[edit]"}{/textarea}
 
 						{* any simple service edit options *}
-						{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_mini_tpl}
+						{include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_mini_tpl"}
 
 						<div class="row submit">
 							<input type="submit" name="preview" value="{tr}Preview{/tr}" /> 
@@ -55,7 +55,7 @@
 				{/jstab}
 
 				{* any service edit template tabs *}
-				{include file="bitpackage:liberty/edit_services_inc.tpl serviceFile=content_edit_tab_tpl}
+				{include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_tab_tpl"}
 			{/jstabs}
 		{/form}
 	</div><!-- end .body -->
