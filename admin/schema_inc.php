@@ -109,7 +109,7 @@ $sequences = array (
 );
 $gBitInstaller->registerSchemaSequences( TICKETS_PKG_NAME, $sequences );
 
-$insertTicketFieldDefs   = "INSERT INTO `".BIT_DB_PREFIX."ticket_field_defs` (`title`, `description, `sort_order`, `use_at_creation`, `is_enabled`)";
+$insertTicketFieldDefs   = "INSERT INTO `".BIT_DB_PREFIX."ticket_field_defs` (`title`, `description`, `sort_order`, `use_at_creation`, `is_enabled`)";
 $insertTicketFieldValues = "INSERT INTO `".BIT_DB_PREFIX."ticket_field_values` (`def_id`, `field_value`, `sort_order`, `is_default`, `is_enabled`)";
 
 $gBitInstaller->registerSchemaDefault( TICKETS_PKG_NAME, array(
