@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.27 2008/12/28 00:15:24 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.27 2008/12/28 00:15:24 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.28 2009/02/20 23:22:53 pppspoonman Exp $
+* $Id: BitTicket.php,v 1.28 2009/02/20 23:22:53 pppspoonman Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.27 $ $Date: 2008/12/28 00:15:24 $ $Author: pppspoonman $
+* @version $Revision: 1.28 $ $Date: 2009/02/20 23:22:53 $ $Author: pppspoonman $
 * @class BitTicket
 */
 
@@ -119,10 +119,10 @@ class BitTicket extends LibertyMime {
 					LEFT JOIN `".BIT_DB_PREFIX."liberty_content` lcm ON( lc.`content_id` = t.`milestone_id` )
 				WHERE t.`$lookupColumn`=? $whereSql";
 
-            $attrQuery = "SELECT ta.*, tf.`def_id`, tf.`field_id`, tf.`field_value`, td.`title` AS `def_title`
+            $attrQuery = "SELECT ta.*, tf.`def_id`, tf.`field_id`, tf.`field_value`, td.`title` AS def_title
                 FROM `".BIT_DB_PREFIX."ticket_attributes` ta
-                    LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values tf ON( ta.`field_id` = tf.`field_id` )
-					LEFT JOIN `".BIT_DB_PREFIX."ticket_field_defs td ON( tf.`def_id` = td.`def_id` )
+                    LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values` tf ON( ta.`field_id` = tf.`field_id` )
+					LEFT JOIN `".BIT_DB_PREFIX."ticket_field_defs` td ON( tf.`def_id` = td.`def_id` )
                 WHERE ta.`ticket_id`=?";
                 
 			$result = $this->mDb->query( $query, $bindVars );
@@ -472,8 +472,8 @@ class BitTicket extends LibertyMime {
 			
 			$query_attr = "SELECT ta.*, td.`def_id`, tf.`field_id`, tf.`field_value`
                 FROM `".BIT_DB_PREFIX."ticket_attributes` ta
-                    LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values tf ON( ta.`field_id` = tf.`field_id` )
-					LEFT JOIN `".BIT_DB_PREFIX."ticket_field_defs td ON( tf.`def_id` = td.`def_id` )
+                    LEFT JOIN `".BIT_DB_PREFIX."ticket_field_values` tf ON( ta.`field_id` = tf.`field_id` )
+					LEFT JOIN `".BIT_DB_PREFIX."ticket_field_defs` td ON( tf.`def_id` = td.`def_id` )
                 WHERE ta.`ticket_id` IN ($in)
 				ORDER BY td.`sort_order`";
 				
