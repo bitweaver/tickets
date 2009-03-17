@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.28 2009/02/20 23:22:53 pppspoonman Exp $
-* $Id: BitTicket.php,v 1.28 2009/02/20 23:22:53 pppspoonman Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.29 2009/03/17 20:23:21 wjames5 Exp $
+* $Id: BitTicket.php,v 1.29 2009/03/17 20:23:21 wjames5 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.28 $ $Date: 2009/02/20 23:22:53 $ $Author: pppspoonman $
+* @version $Revision: 1.29 $ $Date: 2009/03/17 20:23:21 $ $Author: wjames5 $
 * @class BitTicket
 */
 
@@ -610,4 +610,15 @@ class BitTicket extends LibertyMime {
 		$pParamHash['new_value'] = $result['new_value'];
 	}
 }
+
+function tickets_content_verify( &$pObject, &$pParamHash ) {
+	global $gBitSystem, $gBitUser, $gContent;
+	if( $gBitSystem->isPackageActive( 'tickets' ) && $pObject->getContentType() == BITCOMMENT_CONTENT_TYPE_GUID ){
+		if( $gContent->storeOnlyHeader( $pParamHash['ticket'] ) ) {
+			$gContent->loadTicketHistory();
+			$pParamHash['edit'] = "{history id=".$pParamHash['ticket']['historyIds'][0]."} ".$pParamHash['edit'];
+		}
+	}
+}
+
 ?>
