@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_tickets/ajax_header.php,v 1.4 2008/12/10 23:18:17 pppspoonman Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_tickets/ajax_header.php,v 1.5 2010/02/08 21:27:26 wjames5 Exp $
  * @package liberty
  * @subpackage functions
  */
@@ -8,7 +8,7 @@
 /**
  * required setup
  */
-require_once( '../bit_setup_inc.php' );
+require_once( '../kernel/setup_inc.php' );
 
 require_once( 'lookup_tickets_inc.php' );
  

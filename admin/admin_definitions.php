@@ -1,6 +1,6 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_tickets/admin/admin_definitions.php,v 1.2 2008/12/04 23:11:49 pppspoonman Exp $
-require_once( '../../bit_setup_inc.php' );
+// $Header: /cvsroot/bitweaver/_bit_tickets/admin/admin_definitions.php,v 1.3 2010/02/08 21:27:26 wjames5 Exp $
+require_once( '../../kernel/setup_inc.php' );
 
 include_once( TICKETS_PKG_PATH.'BitTicket.php' );
 include_once( TICKETS_PKG_PATH.'lookup_tickets_inc.php' );
