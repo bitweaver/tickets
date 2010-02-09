@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets_inc.tpl,v 1.2 2008/12/11 22:45:51 pppspoonman Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets_inc.tpl,v 1.3 2010/02/09 17:21:22 wjames5 Exp $ *}
 {strip}
 	{minifind sort_mode=$sort_mode}
 
@@ -69,7 +69,7 @@
 			<div style="text-align:right;">
 				<script type="text/javascript">/* <![CDATA[ check / uncheck all */
 					document.write("<label for=\"switcher\">{tr}Select All{/tr}</label> ");
-					document.write("<input name=\"switcher\" id=\"switcher\" type=\"checkbox\" onclick=\"switchCheckboxes(this.form.id,'checked[]','switcher')\" /><br />");
+					document.write("<input name=\"switcher\" id=\"switcher\" type=\"checkbox\" onclick=\"BitBase.switchCheckboxes(this.form.id,'checked[]','switcher')\" /><br />");
 				/* ]]> */</script>
 
 				<select name="submit_mult" onchange="this.form.submit();">
