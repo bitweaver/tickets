@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.29 2009/03/17 20:23:21 wjames5 Exp $
-* $Id: BitTicket.php,v 1.29 2009/03/17 20:23:21 wjames5 Exp $
+* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.30 2010/04/17 22:46:10 wjames5 Exp $
+* $Id: BitTicket.php,v 1.30 2010/04/17 22:46:10 wjames5 Exp $
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.29 $ $Date: 2009/03/17 20:23:21 $ $Author: wjames5 $
+* @version $Revision: 1.30 $ $Date: 2010/04/17 22:46:10 $ $Author: wjames5 $
 * @class BitTicket
 */
 
@@ -77,7 +77,7 @@ class BitTicket extends LibertyMime {
 		$this->mContentTypeGuid = BITTICKET_CONTENT_TYPE_GUID;
 		$this->registerContentType( BITTICKET_CONTENT_TYPE_GUID, array(
 			'content_type_guid'   => BITTICKET_CONTENT_TYPE_GUID,
-			'content_description' => 'Ticket',
+			'content_name' => 'Ticket',
 			'handler_class'       => 'BitTicket',
 			'handler_package'     => 'tickets',
 			'handler_file'        => 'BitTicket.php',

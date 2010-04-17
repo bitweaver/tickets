@@ -164,4 +164,8 @@ $gBitInstaller->registerPreferences( TICKETS_PKG_NAME, array(
 	array( TICKETS_PKG_NAME, 'tickets_list_title', 'y' ),
 	array( TICKETS_PKG_NAME, 'tickets_list_tickets', 'y' ),
 ) );
-?>
+
+// Requirements
+$gBitInstaller->registerRequirements( TICKETS_PKG_NAME, array(
+    'liberty' => array( 'min' => '2.1.4' ),
+));
