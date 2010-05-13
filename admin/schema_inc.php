@@ -12,7 +12,7 @@ $tables = array(
     ",
 
     'tickets' => "
-        ticket_id I4 AUTO PRIMARY,
+        ticket_id I4 PRIMARY,
         content_id I4,
         assignee_id I4,
 		milestone_id I4
@@ -54,7 +54,7 @@ $tables = array(
 	",
     
     'ticket_history' => "
-    	history_id I4 AUTO PRIMARY,
+    	history_id I4 PRIMARY,
         ticket_id I4,
 		change_date I8,
 		user_id I4, 
@@ -103,9 +103,10 @@ $gBitInstaller->registerSchemaIndexes( TICKETS_PKG_NAME, $indices );
 
 // ### Sequences
 $sequences = array (
-//	'tickets_ticket_id_seq'      => array( 'start' => 1 ),
+	'tickets_ticket_id_seq'      => array( 'start' => 1 ),
+	'ticket_history_id_seq'      => array( 'start' => 1 ),
+	'tickets_milestone_id_seq'   => array( 'start' => 1 )
 //	'tickets_ticket_field_defs_field_id_seq'      => array( 'start' => 1 )
-	'ticket_history_id_seq'      => array( 'start' => 1 )
 );
 $gBitInstaller->registerSchemaSequences( TICKETS_PKG_NAME, $sequences );
 
