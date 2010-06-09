@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_tickets/ajax_header.php,v 1.5 2010/02/08 21:27:26 wjames5 Exp $
+ * @version $Header$
  * @package liberty
  * @subpackage functions
  */

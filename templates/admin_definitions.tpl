@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/admin_definitions.tpl,v 1.1 2008/11/30 17:09:32 pppspoonman Exp $ *}
+{* $Header$ *}
 {strip}
 
 <div class="floaticon">{bithelp}</div>

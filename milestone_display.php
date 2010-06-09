@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/milestone_display.php,v 1.5 2010/02/08 21:27:26 wjames5 Exp $
+// $Header$
 // Copyright (c) 2004 bitweaver Tickets
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_history_inc.tpl,v 1.2 2008/12/09 22:10:45 pppspoonman Exp $ *}
+{* $Header$ *}
 {strip}
 	<div class="header">
 		<div class="date">

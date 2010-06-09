@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/list_tickets_inc.tpl,v 1.3 2010/02/09 17:21:22 wjames5 Exp $ *}
+{* $Header$ *}
 {strip}
 	{minifind sort_mode=$sort_mode}
 

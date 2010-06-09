@@ -1,5 +1,5 @@
 <?php 
-// $Header: /cvsroot/bitweaver/_bit_tickets/admin/admin_definitions.php,v 1.3 2010/02/08 21:27:26 wjames5 Exp $
+// $Header$
 require_once( '../../kernel/setup_inc.php' );
 
 include_once( TICKETS_PKG_PATH.'BitTicket.php' );

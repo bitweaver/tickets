@@ -1,7 +1,7 @@
 <?php
 /**
-* $Header: /cvsroot/bitweaver/_bit_tickets/BitTicket.php,v 1.30 2010/04/17 22:46:10 wjames5 Exp $
-* $Id: BitTicket.php,v 1.30 2010/04/17 22:46:10 wjames5 Exp $
+* $Header$
+* $Id$
 */
 
 /**
@@ -10,7 +10,7 @@
 *
 * date created 2008/10/19
 * @author SpOOnman <tomasz2k@poczta.onet.pl>
-* @version $Revision: 1.30 $ $Date: 2010/04/17 22:46:10 $ $Author: wjames5 $
+* @version $Revision$
 * @class BitTicket
 */
 

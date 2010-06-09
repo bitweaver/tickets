@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tickets/templates/edit_header_inc.tpl,v 1.7 2009/01/15 20:05:15 pppspoonman Exp $ *}
+{* $Header$ *}
 {strip}
     {foreach from=$fieldDefinitions item=fieldDef}
         {if (($gContent->mInfo.ticket_id) || ($fieldDef.use_at_creation == 1)) }

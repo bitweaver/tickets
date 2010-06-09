@@ -1,5 +1,5 @@
 <?php
-// $Header: /cvsroot/bitweaver/_bit_tickets/list_tickets.php,v 1.11 2010/02/08 21:27:26 wjames5 Exp $
+// $Header$
 // Copyright (c) 2008 bitweaver Tickets
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
