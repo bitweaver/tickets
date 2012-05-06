@@ -61,7 +61,7 @@ class BitMilestone extends LibertyMime {
 	 * @return void
 	 */
 	function BitMilestone( $pMilestoneId=NULL, $pContentId=NULL ) {
-		LibertyMime::LibertyMime();
+		parent::__construct();
 		$this->mMilestoneId = $pMilestoneId;
 		$this->mContentId = $pContentId;
 		$this->mAssigneeId = NULL;

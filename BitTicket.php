@@ -69,7 +69,7 @@ class BitTicket extends LibertyMime {
 	 * @return void
 	 */
 	function BitTicket( $pTicketId=NULL, $pContentId=NULL ) {
-		LibertyMime::LibertyMime();
+		parent::__construct();
 		$this->mTicketId = $pTicketId;
 		$this->mContentId = $pContentId;
 		$this->mAssigneeId = NULL;
