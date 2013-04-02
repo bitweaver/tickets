@@ -3,10 +3,10 @@
 	<div class="floaticon">
 		{if $print_page ne 'y'}
 			{if $gContent->hasUpdatePermission()}
-				<a title="{tr}Edit this milestone{/tr}" href="{$smarty.const.TICKETS_PKG_URL}edit_milestone.php?milestone_id={$gContent->mInfo.milestone_id}">{biticon ipackage="icons" iname="accessories-text-editor" iexplain="Edit Tickets"}</a>
+				<a title="{tr}Edit this milestone{/tr}" href="{$smarty.const.TICKETS_PKG_URL}edit_milestone.php?milestone_id={$gContent->mInfo.milestone_id}">{booticon iname="icon-edit" ipackage="icons" iexplain="Edit Tickets"}</a>
 			{/if}
 			{if $gBitUser->hasExpungePermission()}
-				<a title="{tr}Remove this milestone{/tr}" href="{$smarty.const.TICKETS_PKG_URL}remove_milestone.php?milesone_id={$gContent->mInfo.milestone_id}">{biticon ipackage="icons" iname="edit-delete" iexplain="Remove Tickets"}</a>
+				<a title="{tr}Remove this milestone{/tr}" href="{$smarty.const.TICKETS_PKG_URL}remove_milestone.php?milesone_id={$gContent->mInfo.milestone_id}">{booticon iname="icon-trash" ipackage="icons" iexplain="Remove Tickets"}</a>
 			{/if}
 		{/if}<!-- end print_page -->
 	</div><!-- end .floaticon -->
