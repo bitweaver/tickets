@@ -4,7 +4,7 @@
 		{jstab title="Home Tickets"}
 			{legend legend="Home Tickets"}
 				<input type="hidden" name="page" value="{$page}" />
-				<div class="row">
+				<div class="control-group">
 					{formlabel label="Home Tickets (main tickets)" for="homeTickets"}
 					{forminput}
 						<select name="homeTickets" id="homeTickets">
@@ -17,7 +17,7 @@
 					{/forminput}
 				</div>
 
-				<div class="row submit">
+				<div class="control-group submit">
 					<input type="submit" name="homeTabSubmit" value="{tr}Change preferences{/tr}" />
 				</div>
 			{/legend}
@@ -27,7 +27,7 @@
 			{legend legend="List Settings"}
 				<input type="hidden" name="page" value="{$page}" />
 				{foreach from=$formTicketsLists key=item item=output}
-					<div class="row">
+					<div class="control-group">
 						{formlabel label=`$output.label` for=$item}
 						{forminput}
 							{html_checkboxes name="$item" values="y" checked=$gBitSystem->getConfig($item) labels=false id=$item}
@@ -36,7 +36,7 @@
 					</div>
 				{/foreach}
 
-				<div class="row submit">
+				<div class="control-group submit">
 					<input type="submit" name="listTabSubmit" value="{tr}Change preferences{/tr}" />
 				</div>
 			{/legend}

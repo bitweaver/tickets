@@ -34,7 +34,7 @@
 							<div class="clear"></div>
 						</div>
 
-						<div class="row">
+						<div class="control-group">
 							{formlabel label="Title" for="title"}
 							{forminput}
 								<input type="text" size="60" maxlength="200" name="ticket[title]" id="title" value="{$gContent->mInfo.title|escape}" />
@@ -47,7 +47,7 @@
 						{* any simple service edit options *}
 						{include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_mini_tpl"}
 
-						<div class="row submit">
+						<div class="control-group submit">
 							<input type="submit" name="preview" value="{tr}Preview{/tr}" /> 
 							<input type="submit" name="save_ticket" value="{tr}Save{/tr}" />
 						</div>

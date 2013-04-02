@@ -19,7 +19,7 @@
 		</div>
 		
 		<div class="body">
-			<div class="row">
+			<div class="control-group">
 				{tr}From{/tr} {$gContent->mDateFrom|bit_long_datetime} {tr}to{/tr} {$gContent->mDateTo|bit_long_datetime}
                 {tr}Duration{/tr}: 3 days
                 {tr}Time left{/tr}: 1 day

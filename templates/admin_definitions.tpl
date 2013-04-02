@@ -44,7 +44,7 @@
 	        {/foreach}
 	       	</table>
 	       	
-			<div class="row submit">
+			<div class="control-group submit">
 				<input type="submit" name="store_settings" value="{tr}Change preferences{/tr}" />
 			</div>
 	
