@@ -53,7 +53,7 @@
 
 					{if $gBitUser->hasPermission( 'p_tickets_update' )}
 						<td class="actionicon">
-							{smartlink ititle="Edit" ifile="edit.php" ibiticon="icons/accessories-text-editor" ticket_id=$ticket.ticket_id}
+							{smartlink ititle="Edit" ifile="edit.php" booticon="icon-edit" ticket_id=$ticket.ticket_id}
 							<input type="checkbox" name="checked[]" title="{$ticket.title|escape}" value="{$ticket.ticket_id}" />
 						</td>
 					{/if}
