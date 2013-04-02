@@ -7,9 +7,9 @@
 		{if $gBitUser->hasPermission( 'p_tickets_create' )}
 			<li><a class="item" href="{$smarty.const.TICKETS_PKG_URL}edit.php">{booticon iname="icon-file" ipackage="icons" iexplain="Create Ticket" ilocation=menu}</a></li>
 		{/if}
-			<li><a class="item" href="{$smarty.const.TICKETS_PKG_URL}milestone_display.php">{biticon iname="folder" iexplain="Milestones" ilocation=menu}</a></li>
+			<li><a class="item" href="{$smarty.const.TICKETS_PKG_URL}milestone_display.php">{booticon iname="icon-folder-close"   iexplain="Milestones" ilocation=menu}</a></li>
 		{if $gBitUser->hasPermission( 'p_tickets_milestone_create' )}
-			<li><a class="item" href="{$smarty.const.TICKETS_PKG_URL}edit_milestone.php">{biticon iname="folder-new" iexplain="Create Milestone" ilocation=menu}</a></li>
+			<li><a class="item" href="{$smarty.const.TICKETS_PKG_URL}edit_milestone.php">{booticon iname="icon-folder-close"   iexplain="Create Milestone" ilocation=menu}</a></li>
 		{/if}
 	</ul>
 {/strip}
