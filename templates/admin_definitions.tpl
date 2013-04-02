@@ -37,7 +37,7 @@
 	        		</ol></td>
 	        		<td>
 	
-	                            <a href="{$smarty.const.TICKETS_PKG_URL}field_sort.php?sort_field={$fieldValue.field_id}&amp;move_item=s&amp;tab=organise">{biticon iforce=icon ipackage="icons" iname="go-down" iexplain="move down" style="float:right"}</a>
+	                            <a href="{$smarty.const.TICKETS_PKG_URL}field_sort.php?sort_field={$fieldValue.field_id}&amp;move_item=s&amp;tab=organise">{booticon iname="icon-cloud-download"  iforce=icon ipackage="icons"  iexplain="move down" style="float:right"}</a>
 	                            <a href="{$smarty.const.TICKETS_PKG_URL}field_sort.php?sort_field={$fieldValue.field_id}&amp;move_items=n&amp;tab=organise">{booticon iname="icon-cloud-upload"  iforce=icon ipackage="icons"  iexplain="move up" style="float:right"}</a>
 	                </td>
 	             </tr>
