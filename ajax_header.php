@@ -56,7 +56,7 @@ if( !$gContent->hasUserPermission( 'p_tickets_update', TRUE, TRUE)) {
 }
 
 if( !empty($formfeedback) ){
-	require_once $gBitSmarty->_get_plugin_filepath( 'function', 'formfeedback' );
+	$gBitSmarty->loadPlugin( 'smarty_modifier_formfeedback' );
 	$feedback = smarty_function_formfeedback( $formfeedback, $gBitSmarty );
 }
 
