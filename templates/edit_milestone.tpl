@@ -53,7 +53,7 @@
 							{/forminput}
 						</div>
 
-						{textarea name="milestone[edit]"}{/textarea}
+						{textarea name="milestone[edit]"}
 
 						{* any simple service edit options *}
 						{include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_mini_tpl"}
