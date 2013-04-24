@@ -6,7 +6,7 @@
 		<input type="hidden" name="offset" value="{$control.offset|escape}" />
 		<input type="hidden" name="sort_mode" value="{$control.sort_mode|escape}" />
 
-		<table class="data">
+		<table class="table data">
 			<tr>
 				{if $gBitSystem->isFeatureActive( 'tickets_list_ticket_id' ) eq 'y'}
 					<th>{smartlink ititle="Ticket Id" isort=ticket_id offset=$control.offset iorder=desc idefault=1}</th>

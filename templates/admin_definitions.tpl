@@ -13,7 +13,7 @@
 
 		{form legend="Field Definitions"}
 			<input type="hidden" name="page" value="{$page}" />
-			<table class="data">
+			<table class="table data">
 				<caption>{tr}Fields{/tr}</caption>
 				<tr>
 					<th title="Sort order">{tr}Sort order{/tr}</th>
