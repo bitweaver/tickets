@@ -18,7 +18,7 @@
 				</div>
 
 				<div class="control-group submit">
-					<input type="submit" class="btn" name="homeTabSubmit" value="{tr}Change preferences{/tr}" />
+					<input type="submit" class="btn btn-default" name="homeTabSubmit" value="{tr}Change preferences{/tr}" />
 				</div>
 			{/legend}
 		{/jstab}
@@ -37,7 +37,7 @@
 				{/foreach}
 
 				<div class="control-group submit">
-					<input type="submit" class="btn" name="listTabSubmit" value="{tr}Change preferences{/tr}" />
+					<input type="submit" class="btn btn-default" name="listTabSubmit" value="{tr}Change preferences{/tr}" />
 				</div>
 			{/legend}
 		{/jstab}
