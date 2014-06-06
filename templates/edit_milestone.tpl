@@ -27,7 +27,7 @@
 					{legend legend="Edit/Create Tickets Record"}
 						<input type="hidden" name="milestone[milestone_id]" value="{$gContent->mInfo.milestone_id}" />
 						
-						<div class="control-group">
+						<div class="form-group">
 							{formlabel label="Title" for="title"}
 							{forminput}
 								<input type="text" size="60" maxlength="200" name="milestone[title]" id="title" value="{$gContent->mInfo.title|escape}" />
@@ -35,7 +35,7 @@
 							{/forminput}
 						</div>
 						
-						<div class="control-group">
+						<div class="form-group">
 							{formlabel label="Date from" for=""}
 							{forminput}
 								{html_select_date field_array="milestone" prefix="from_" time=$gContent->mDateFrom start_year="-5" end_year="+10"} {tr}at{/tr}&nbsp;
@@ -44,7 +44,7 @@
 							{/forminput}
 						</div>
 
-						<div class="control-group">
+						<div class="form-group">
 							{formlabel label="Date to" for=""}
 							{forminput}
 								{html_select_date field_array="milestone" prefix="to_" time=$gContent->mDateTo start_year="-5" end_year="+10"} {tr}at{/tr}&nbsp;
@@ -58,7 +58,7 @@
 						{* any simple service edit options *}
 						{include file="bitpackage:liberty/edit_services_inc.tpl" serviceFile="content_edit_mini_tpl"}
 
-						<div class="control-group submit">
+						<div class="form-group submit">
 							<input type="submit" class="btn btn-default" name="preview" value="{tr}Preview{/tr}" /> 
 							<input type="submit" class="btn btn-default" name="save_milestone" value="{tr}Save{/tr}" />
 						</div>
